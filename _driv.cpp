@@ -18,11 +18,6 @@ const int enable = 36;
 const int trig_out_x = 38;
 const int trig_out_y = 40;
 
-namespace Param_pi
-{
-    enum class Pin { din = 19, sclk = 23, sync = 24, enable = 36, trig_out_x = 38, trig_out_y = 40, error = 0 };
-}
-
 
 
 #define lapsed (((clock() - start) / (float)CLOCKS_PER_SEC) * 1000000) 
