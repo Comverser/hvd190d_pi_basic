@@ -90,7 +90,7 @@ private:
 clock_t Hvd190d_pi::t_start;
 
 //////////////////// import csv data //////////////////// 
-//using namespace std; 
+using namespace std; 
 template <class T> 
 class csv_istream_iterator: public iterator<input_iterator_tag, T> 
 { 
@@ -130,11 +130,11 @@ const string csv_istream_iterator<string>::operator *() const
 	return _value; 
 } 
 
-std::vector<int> readData(char filename[]) 
+vector<int> readData(char filename[]) 
 { 
-    std::vector<int> data; 
+    vector<int> data; 
     { // test for integers 
-        std::ifstream fin( filename ); 
+        ifstream fin( filename ); 
     	if( fin ) 
     	{ 
     		copy( csv_istream_iterator<int>( fin ), 
@@ -148,7 +148,7 @@ std::vector<int> readData(char filename[])
 
 int main(int args_len, char * args[]) { 
     	
-	std::vector<int> d; 
+	vector<int> d; 
 	d = readData(args[1]); 
 
 	unsigned long cmd; 
