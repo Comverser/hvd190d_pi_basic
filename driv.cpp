@@ -6,7 +6,7 @@
 #include <vector> 
 #include <string> 
 
-#include <wiringPi.h> // class Hvd190d_pi 
+#include <wiringPi.h>
 class Hvd190d_pi
 {
 public:
@@ -18,12 +18,20 @@ public:
     {
         return (((clock() - t_start) / (float)CLOCKS_PER_SEC) * 1000000);
     }
-    static void write_bits(unsigned long bits)
+    static inline unsigned long convert_to_spi(int ch, int v)
+    {
+		return 0x100000 | ( ( (0x000000 | (ch-1)) << 16) | v); 
+    }
+    static void write_spi(unsigned long bits)
     { 
     	digitalWrite(sync, 0); 
     	for(int i = 0; i < 24; i++) 
     		write_bit((bits >> (23 - i)) & 0x01); 
     	digitalWrite(sync, 1); 
+    }
+    static void write_spi(int ch, int v)
+    {
+        write_spi(convert_to_spi(ch, v));
     }
     static void write_trig_x(int signal)
     {
@@ -45,7 +53,7 @@ public:
         disable_hv();
     }
 private:
-    static clock_t t_start; 
+    static clock_t t_start;
     enum Pin_spi { din = 19, sclk = 23, sync = 24 };
     enum Pin_trig { x = 38, y = 40 };
     enum Pin_misc { hv = 36 };
@@ -69,13 +77,13 @@ private:
     }
     static void setup_dac()
     {
-    	write_bits(0x280001);
+    	write_spi(0x280001);
     	delay(50);
-    	write_bits(0x380000);
+    	write_spi(0x380000);
     	delay(50);
-    	write_bits(0x20000F);
+    	write_spi(0x20000F);
     	delay(50);
-    	write_bits(0x300000);
+    	write_spi(0x300000);
     	delay(50);
     }
     static void enable_hv()
@@ -173,10 +181,10 @@ int main(int args_len, char * args[]) {
 			v = d[k + 2]; 
             Hvd190d_pi::t_reset();
 		}
- 
-		cmd = 0x100000 | ( ( (0x000000 | (ch-1)) << 16) | v); 
+        //cmd = Hvd190d_pi::convert_to_spi(ch, v); 
         while ( Hvd190d_pi::t_lapsed() < us );
-        Hvd190d_pi::write_bits(cmd); 
+        Hvd190d_pi::write_spi(ch, v);
+//        Hvd190d_pi::write_spi(cmd); 
 	} 
 
     Hvd190d_pi::terminate();
