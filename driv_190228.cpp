@@ -90,7 +90,7 @@ private:
 clock_t Hvd190d_pi::t_start;
 
 //////////////////// import csv data //////////////////// 
-//using namespace std; 
+using namespace std; 
 template <class T> 
 class csv_istream_iterator: public iterator<input_iterator_tag, T> 
 { 
@@ -101,16 +101,14 @@ public:
 	csv_istream_iterator( char delim = ',' ): _input( 0 ), _delim( delim ) {} 
 	csv_istream_iterator( istream & in, char delim = ',' ): _input( &in ), _delim( delim ) { ++*this; } 
 
-	const T operator *() const 
-    { 
+	const T operator *() const { 
 		istringstream ss( _value ); 
 		T value; 
 		ss >> value; 
 		return value; 
 	}
  
-	istream & operator ++() 
-    { 
+	istream & operator ++() { 
 		if( !( getline( *_input, _value, _delim ) ) ) 
 		{ 
 			_input = 0; 
@@ -118,33 +116,34 @@ public:
 		return *_input; 
 	}
  
-	bool operator !=( const csv_istream_iterator & rhs ) const 
-    { 
+	bool operator !=( const csv_istream_iterator & rhs ) const { 
 		return _input != rhs._input; 
 	} 
 }; 
 
 template <> 
-const string csv_istream_iterator<string>::operator *() const 
-{ 
+const string csv_istream_iterator<string>::operator *() const { 
 	return _value; 
 } 
 
-std::vector<int> readData(char filename[]) 
-{ 
-    std::vector<int> data; 
-    { // test for integers 
-        std::ifstream fin( filename ); 
-    	if( fin ) 
-    	{ 
-    		copy( csv_istream_iterator<int>( fin ), 
-    			csv_istream_iterator<int>(), 
-    			back_inserter(data) );
+std::vector<int> readData(char filename[]) { 
+		std::vector<int> data; 
+		{ // test for integers 
+	ifstream fin( filename ); 
+	if( fin ) 
+	{ 
+		copy( csv_istream_iterator<int>( fin ), 
+			csv_istream_iterator<int>(), 
+			back_inserter(data) );
+ 
 			fin.close(); 
 		} 
 	} 
-    return data; 
+			return data; 
 } 
+
+
+
 
 int main(int args_len, char * args[]) { 
     	

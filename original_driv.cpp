@@ -82,10 +82,10 @@ void writeBit(int bit)
 	digitalWrite(sclkPin, 0); 
 }
  
-void writeBits(unsigned long bits, int length)
+void writeBits(unsigned long bits)
 { 
 	digitalWrite(syncPin, 0); 
-	for(int i = 0; i < length; i++) 
+	for(int i = 0; i < 24; i++) 
 		writeBit((bits >> (23 - i)) & 0x01); 
 	digitalWrite(syncPin, 1); 
 } 
@@ -95,21 +95,21 @@ void init()
 {
 	digitalWrite(enable, 1);
 	
-	writeBits(0x280001, 24);
+	writeBits(0x280001);
 	delay(50);
-	writeBits(0x380000, 24);
+	writeBits(0x380000);
 	delay(50);
-	writeBits(0x20000F, 24);
+	writeBits(0x20000F);
 	delay(50);
-	writeBits(0x300000, 24);
+	writeBits(0x300000);
 	delay(50);
 }
 
 void end()
 {
-	writeBits(0x1F8000, 24);
+	writeBits(0x1F8000);
 	delay(1000);
-	writeBits(0x1F0000, 24);
+	writeBits(0x1F0000);
 	delay(1000);
 	digitalWrite(enable, 0);
 }
@@ -155,7 +155,7 @@ int main(int args_len, char * args[]) {
  
 		cmd = 0x100000 | ( ( (0x000000 | (ch-1)) << 16) | v); 
 		while (lapsed < us);
-		writeBits(cmd, 24); 
+		writeBits(cmd); 
 	} 
 	
 	
