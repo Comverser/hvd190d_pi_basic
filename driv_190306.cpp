@@ -10,7 +10,6 @@
 class Hvd190d_pi
 {
 public:
-    static int const delay_loop_pi_ns = 150;
     static void t_reset()
     {
         t_start = clock();
@@ -159,7 +158,6 @@ int main(int args_len, char * args[]) {
     	
 	vector<int> csv;
 	csv = readData(args[1]); 
-    enum csv_col { ch, t_us, dac, trig_x, trig_y };
     // column 0 : driver output channel
     // column 1 : time in microseconds
     // column 2 : 16-bit DAC
@@ -168,17 +166,17 @@ int main(int args_len, char * args[]) {
 
     Hvd190d_pi::initialize();
 	
-    for (unsigned int k = 0; k < csv.size(); k += 5) 
+    for (unsigned int k = 0; k < csv.size(); k += 3) 
 	{ 
-        if(csv[k + ch] == 0 && csv[k + t_us] == 0 && csv[k + dac] == 0)
+        if(csv[k + 0] == 0 && csv[k + 1] == 0 && csv[k + 2] == 0)
 		{ 
 			k = 0; 
             Hvd190d_pi::t_reset();
 		}
-        while ( Hvd190d_pi::t_lapsed() < csv[k + t_us] );
-        Hvd190d_pi::write_trig_x(csv[k + trig_x]);
-        Hvd190d_pi::write_trig_y(csv[k + trig_y]);
-        Hvd190d_pi::write_spi(csv[k + ch], csv[k + dac]);
+        while ( Hvd190d_pi::t_lapsed() < csv[k + 1] );
+        //Hvd190d_pi::write_trig_x();
+        //Hvd190d_pi::write_trig_y();
+        Hvd190d_pi::write_spi(csv[k + 0], csv[k + 2]);
 	} 
 
     Hvd190d_pi::terminate();
