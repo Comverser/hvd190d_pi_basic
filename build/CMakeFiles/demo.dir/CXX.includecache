@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../src/libs/driv.h
+wiringPi.h
+-
+iostream
+-
+
+/home/pi/dev_s/hvd190d_pi_basic/src/apps/main.cpp
+driv.h
+/home/pi/dev_s/hvd190d_pi_basic/src/apps/driv.h
+
+/home/pi/dev_s/hvd190d_pi_basic/src/libs/driv.cpp
+driv.h
+/home/pi/dev_s/hvd190d_pi_basic/src/libs/driv.h
+
+/home/pi/dev_s/hvd190d_pi_basic/src/libs/driv.h
+wiringPi.h
+-
+iostream
+-
+

@@ -1,0 +1,3 @@
+/home/pi/dev_s/hvd190d_pi_basic/build/CMakeFiles/rebuild_cache.dir
+/home/pi/dev_s/hvd190d_pi_basic/build/CMakeFiles/edit_cache.dir
+/home/pi/dev_s/hvd190d_pi_basic/build/CMakeFiles/demo.dir

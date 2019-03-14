@@ -10,7 +10,7 @@
 class Hvd190d_pi
 {
 public:
-    static int const delay_loop_pi_ns = 150;
+    static int const delay_loop_pi_ns = 1500;
     static void t_reset()
     {
         t_start = clock();
