@@ -5,7 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/pi/dev_s/hvd190d_pi_basic/src/apps/main.cpp" "/home/pi/dev_s/hvd190d_pi_basic/build/CMakeFiles/demo.dir/src/apps/main.cpp.o"
-  "/home/pi/dev_s/hvd190d_pi_basic/src/libs/driv.cpp" "/home/pi/dev_s/hvd190d_pi_basic/build/CMakeFiles/demo.dir/src/libs/driv.cpp.o"
+  "/home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_driv.cpp" "/home/pi/dev_s/hvd190d_pi_basic/build/CMakeFiles/demo.dir/src/libs/hvd190d_pi_driv.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

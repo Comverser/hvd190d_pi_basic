@@ -150,32 +150,32 @@ src/apps/main.cpp.s:
 	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/apps/main.cpp.s
 .PHONY : src/apps/main.cpp.s
 
-src/libs/driv.o: src/libs/driv.cpp.o
+src/libs/hvd190d_pi_driv.o: src/libs/hvd190d_pi_driv.cpp.o
 
-.PHONY : src/libs/driv.o
+.PHONY : src/libs/hvd190d_pi_driv.o
 
 # target to build an object file
-src/libs/driv.cpp.o:
-	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/driv.cpp.o
-.PHONY : src/libs/driv.cpp.o
+src/libs/hvd190d_pi_driv.cpp.o:
+	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/hvd190d_pi_driv.cpp.o
+.PHONY : src/libs/hvd190d_pi_driv.cpp.o
 
-src/libs/driv.i: src/libs/driv.cpp.i
+src/libs/hvd190d_pi_driv.i: src/libs/hvd190d_pi_driv.cpp.i
 
-.PHONY : src/libs/driv.i
+.PHONY : src/libs/hvd190d_pi_driv.i
 
 # target to preprocess a source file
-src/libs/driv.cpp.i:
-	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/driv.cpp.i
-.PHONY : src/libs/driv.cpp.i
+src/libs/hvd190d_pi_driv.cpp.i:
+	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/hvd190d_pi_driv.cpp.i
+.PHONY : src/libs/hvd190d_pi_driv.cpp.i
 
-src/libs/driv.s: src/libs/driv.cpp.s
+src/libs/hvd190d_pi_driv.s: src/libs/hvd190d_pi_driv.cpp.s
 
-.PHONY : src/libs/driv.s
+.PHONY : src/libs/hvd190d_pi_driv.s
 
 # target to generate assembly for a file
-src/libs/driv.cpp.s:
-	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/driv.cpp.s
-.PHONY : src/libs/driv.cpp.s
+src/libs/hvd190d_pi_driv.cpp.s:
+	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/hvd190d_pi_driv.cpp.s
+.PHONY : src/libs/hvd190d_pi_driv.cpp.s
 
 # Help Target
 help:
@@ -189,9 +189,9 @@ help:
 	@echo "... src/apps/main.o"
 	@echo "... src/apps/main.i"
 	@echo "... src/apps/main.s"
-	@echo "... src/libs/driv.o"
-	@echo "... src/libs/driv.i"
-	@echo "... src/libs/driv.s"
+	@echo "... src/libs/hvd190d_pi_driv.o"
+	@echo "... src/libs/hvd190d_pi_driv.i"
+	@echo "... src/libs/hvd190d_pi_driv.s"
 .PHONY : help
 
 

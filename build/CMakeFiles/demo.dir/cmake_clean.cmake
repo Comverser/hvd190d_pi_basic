@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/demo.dir/src/apps/main.cpp.o"
-  "CMakeFiles/demo.dir/src/libs/driv.cpp.o"
+  "CMakeFiles/demo.dir/src/libs/hvd190d_pi_driv.cpp.o"
   "demo.pdb"
   "demo"
 )

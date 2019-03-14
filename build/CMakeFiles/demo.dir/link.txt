@@ -1,1 +1,1 @@
-/usr/bin/c++    -std=c++14 -g   CMakeFiles/demo.dir/src/apps/main.cpp.o CMakeFiles/demo.dir/src/libs/driv.cpp.o  -o demo /usr/lib/libwiringPi.so 
+/usr/bin/c++    -std=c++14 -g   CMakeFiles/demo.dir/src/apps/main.cpp.o CMakeFiles/demo.dir/src/libs/hvd190d_pi_driv.cpp.o  -o demo /usr/lib/libwiringPi.so 

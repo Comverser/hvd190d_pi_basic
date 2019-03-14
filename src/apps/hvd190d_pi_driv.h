@@ -1,5 +1,5 @@
-#ifndef HVD190D_PI_WRITE_SPI_DRIV_H
-#define HVD190D_PI_WRITE_SPI_DRIV_H
+#ifndef HVD190D_PI_DRIV_H
+#define HVD190D_PI_DRIV_H
 
 #include <wiringPi.h>
 #include <iostream> // for the inline functions
