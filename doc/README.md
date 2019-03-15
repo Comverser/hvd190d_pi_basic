@@ -10,4 +10,8 @@ sudo cp libhvd190d_pi_driv.so /usr/lib
 sudo ldconfig
 
 # g++ compile commands
-g++ -Wall -o main main.cpp -I/usr/include -L/usr/lib -lhvd190d_pi_driv
+g++ -Wall -o main main.cpp -lhvd190d_pi_driv
+
+# optional path flags for the library linking
+-I/usr/include
+-L/usr/lib
