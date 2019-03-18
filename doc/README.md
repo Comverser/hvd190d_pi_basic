@@ -1,6 +1,6 @@
 # hvd190d_pi_basic
 
--------------------- library generation --------------------
+# -------------------- library generation --------------------
 # shared library generation in default mode
 g++ -fPIC -c hvd190d_pi_driv.cpp
 g++ -shared -o libhvd190d_pi_driv.so hvd190d_pi_driv.o -lwiringPi
@@ -11,17 +11,17 @@ g++ -shared -o libhvd190d_pi_driv_debug.so hvd190d_pi_driv_debug.o -lwiringPi
 g++ -c -O2 -DNDEBUG -fpic hvd190d_pi_driv.cpp -o hvd190d_pi_driv_release.o
 g++ -shared -o libhvd190d_pi_driv_release.so hvd190d_pi_driv_release.o -lwiringPi
 
--------------------- library linking -------------------- 
+# -------------------- library linking -------------------- 
 # copy library to system path
 sudo cp hvd190d_pi_driv.h /usr/include
 sudo cp libhvd190d_pi_driv.so /usr/lib
 sudo ldconfig
 
--------------------- main program --------------------
+# -------------------- main program --------------------
 # g++ compile commands
 g++ -o main main.cpp -lhvd190d_pi_driv
 
--------------------- notes --------------------
+# -------------------- notes --------------------
 # optional path flags for the library linking
 -I/usr/include
 -L/usr/lib
