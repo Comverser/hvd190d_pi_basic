@@ -8,5 +8,5 @@ cmake ..
 
 make
 
-./demo ./../src/apps/wf_max_speed.csv
-#./demo ./../src/apps/wf.csv
+#./demo ./../src/apps/wf_max_speed.csv
+./demo ./../src/apps/wf.csv
