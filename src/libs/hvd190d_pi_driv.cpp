@@ -3,9 +3,9 @@
 namespace hvd190d_pi
 {
     // private
-    enum Pin_spi { din = 19, sclk = 23, sync = 24 };
-    enum Pin_trig { x = 38, y = 40 };
-    enum Pin_misc { hv = 36 };
+    enum pin_spi { din = 19, sclk = 23, sync = 24 };
+    enum pin_trig { x = 38, y = 40 };
+    enum pin_misc { hv = 36 };
     static void write_bit(int bit)
     { 
         digitalWrite(sclk, 1); 
