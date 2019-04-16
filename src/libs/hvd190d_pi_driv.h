@@ -13,16 +13,16 @@ namespace hvd190d_pi
     {
         return (((clock() - t_start) / (float)CLOCKS_PER_SEC) * 1000000);
     }
-    inline unsigned long convert_to_spi(int ch, int v)
+    inline unsigned long convert_to_spi(int ch, int v_digital)
     {
-        return 0x100000 | ( ( (0x000000 | (ch-1)) << 16) | v); 
+        return 0x100000 | ( ( (0x000000 | (ch-1)) << 16) | v_digital); 
     }
 
     void t_reset();
     void write_spi(unsigned long bits);
     void write_spi(unsigned long bits_p, unsigned long bits_n);
-    void write_spi(int ch, int v);
-    void write_spi(int ch_p, int v_p, int ch_n, int v_n);
+    void write_spi(int ch, int v_digital);
+    void write_spi(int ch_p, int v_digital_p, int ch_n, int v_digital_n);
     void write_trig_x(int signal);
     void write_trig_y(int signal);
     void initialize();

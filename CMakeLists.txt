@@ -5,6 +5,8 @@ set(CMAKE_BUILD_TYPE Debug)
 #set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
+include_directories(${PROJECT_SOURCE_DIR}/src/libs)
+
 file(GLOB SOURCES_APPS "src/apps/*.cpp")
 file(GLOB SOURCES_LIBS "src/libs/*.cpp")
 
@@ -15,7 +17,6 @@ target_link_libraries(demo ${wiringPi_LIB})
 
 
 #include_directories(${PROJECT_SOURCE_DIR}/src/apps)
-#include_directories(${PROJECT_SOURCE_DIR}/src/libs)
 #set (source_dir_apps "${PROJECT_SOURCE_DIR}/src/apps/")
 # Wildcard additions
 #file (GLOB source_files_apps "${source_dir_apps}/*.cpp")

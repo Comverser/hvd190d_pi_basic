@@ -1,5 +1,7 @@
 #include "hvd190d_pi_driv.h" // <wiringPi.h> <iostream>
+#include "koc_wf_gen.h" // <vector>
 
+#include <typeinfo> // debug : typeid().name()
 
 //////////////////// import csv data //////////////////// 
 #include <sstream> 
@@ -67,31 +69,83 @@ vector<int> readData(char filename[])
 
 int main(int args_len, char * args[]) 
 {
-	vector<int> csv;
-	csv = readData(args[1]); 
+    int user_select;
     enum csv_col { ch, t_us, dac, trig_x, trig_y };
     // column 0 : driver output channel
     // column 1 : time in microseconds
     // column 2 : 16-bit DAC
     // column 3 : trigger signal for x
     // column 4 : trigger signal for y
-
+    
     hvd190d_pi::initialize();
-	
-    for (unsigned int k = 0; k < csv.size(); k += 5) 
-	{ 
-        if(csv[k + ch] == 0 && csv[k + t_us] == 0 && csv[k + dac] == 0)
-		{ 
-			k = 0; 
-            hvd190d_pi::t_reset();
-		}
-        while ( hvd190d_pi::t_lapsed() < csv[k + t_us] );
-        hvd190d_pi::write_trig_x(csv[k + trig_x]);
-        hvd190d_pi::write_trig_y(csv[k + trig_y]);
-        hvd190d_pi::write_spi(csv[k + ch], csv[k + dac]);
-	} 
-   
-    std::cin.get();
+
+    std::cout << "(1) csv trigger mode" << std::endl;
+    std::cout << "(2) csv mode" << std::endl;
+    std::cout << "(3) normal mode" << std::endl;
+    std::cout << "Enter number : ";
+    std::cin >> user_select;
+
+    switch(user_select)
+    {
+        case 1: 
+        {
+            std::cout << "csv trigger mode" << std::endl;
+            vector<int> csv;
+            csv = readData(args[1]); 
+            
+            for (unsigned int k = 0; k < csv.size(); k += 5) 
+            { 
+                if(csv[k + ch] == 0 && csv[k + t_us] == 0 && csv[k + dac] == 0)
+                { 
+                    k = 0; 
+                    hvd190d_pi::t_reset();
+                }
+                while ( hvd190d_pi::t_lapsed() < csv[k + t_us] );
+                hvd190d_pi::write_trig_x(csv[k + trig_x]);
+                hvd190d_pi::write_trig_y(csv[k + trig_y]);
+                hvd190d_pi::write_spi(csv[k + ch], csv[k + dac]);
+            } 
+            break;
+        }
+        case 2: 
+        {
+            std::cout << "csv mode" << std::endl;
+            vector<int> csv;
+            csv = readData(args[1]); 
+            
+            for (unsigned int k = 0; k < csv.size(); k += 3) 
+            { 
+                if(csv[k + ch] == 0 && csv[k + t_us] == 0 && csv[k + dac] == 0)
+                { 
+                    k = 0; 
+                    hvd190d_pi::t_reset();
+                }
+                while ( hvd190d_pi::t_lapsed() < csv[k + t_us] );
+                hvd190d_pi::write_spi(csv[k + ch], csv[k + dac]);
+            } 
+            break;
+        }
+        case 3:
+        {
+            std::cout << "normal trigger mode" << std::endl;
+            koc::wf_gen wf_p(4, 16, 0, 200, 2, koc::wf_gen::waveform_mode::ramp, 1, 60, 60, 0);
+            wf_p.gen_wf();
+            wf_p.gen_wf_t_us();
+            wf_p.gen_wf_v_digital();
+            wf_p.gen_wf_trig();
+            wf_p.debug_s();
+            wf_p.export_wf(koc::wf_gen::analog_digital_mode::digital);
+            break;
+        }
+        case 4:
+        {
+            std::cout << "normal mode" << std::endl;
+            break;
+        }
+        default: 
+            std::cout << "Error" << std::endl;
+            break;
+    }
 
     hvd190d_pi::terminate();
 	
