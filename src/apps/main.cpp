@@ -128,13 +128,47 @@ int main(int args_len, char * args[])
         case 3:
         {
             std::cout << "normal trigger mode" << std::endl;
-            koc::wf_gen wf_p(4, 16, 0, 200, 2, koc::wf_gen::waveform_mode::ramp, 1, 60, 60, 0);
-            wf_p.gen_wf();
-            wf_p.gen_wf_t_us();
-            wf_p.gen_wf_v_digital();
-            wf_p.gen_wf_trig();
-            wf_p.debug_s();
-            wf_p.export_wf(koc::wf_gen::analog_digital_mode::digital);
+
+/*
+            struct param_wf
+            {
+                int adc_bits;
+                double vpp_top;
+                double vpp_bottom;
+                int fs_max; 
+                double fc;
+                int no_repetition;
+                koc::wf_gen::waveform_mode _waveform_mode;
+                double freq = 1;
+                double amp = 100;
+                double offset = 100;
+                double phase = 0;
+                double pulse_width = 0;
+            };
+*/
+            int adc_bits = 16;
+            double vpp_top = 200;
+            double vpp_bottom = 0;
+            int fs_max = 8; 
+            double fc = 0;
+            int no_repetition = 1;
+            koc::wf_gen::waveform_mode _waveform_mode = koc::wf_gen::waveform_mode::std_triangle;
+            double freq = 1;
+            double amp = 100;
+            double offset = 100;
+            double phase = 0;
+            double pulse_width = 0;
+
+            koc::wf_gen wf_x_p(adc_bits, vpp_top, vpp_bottom, fs_max, fc, no_repetition, _waveform_mode, freq, amp, offset, phase, pulse_width);
+            wf_x_p.gen_wf();
+            wf_x_p.gen_wf_t_us();
+            wf_x_p.gen_wf_v_digital();
+            wf_x_p.gen_wf_trig();
+            wf_x_p.debug_s();
+            wf_x_p.export_wf(koc::wf_gen::analog_digital_mode::digital);
+
+
+
             break;
         }
         case 4:

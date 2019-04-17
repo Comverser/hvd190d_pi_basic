@@ -22,7 +22,7 @@ namespace koc
             digital 
         };
 
-        wf_gen(int p_fs_max,int p_adc_bits, double p_vpp_bottom, double p_vpp_top, int p_no_repetition, waveform_mode p_waveform_mode, double p_freq, double p_amp, double p_offset, double p_phase, double p_pulse_width = 0.0);
+        wf_gen(int p_adc_bits, double p_vpp_top, double p_vpp_bottom, int p_fs_max, double p_fc, int p_no_repetition, waveform_mode p_waveform_mode, double p_freq, double p_amp, double p_offset, double p_phase, double p_pulse_width = 0.0);
         void gen_wf();
         void gen_wf_t_us();
         void gen_wf_v_digital();
@@ -36,10 +36,11 @@ namespace koc
         double get_freq_max_eight_bits();
         void debug_s();
     private:
-        int fs_max; 
         int adc_bits;
-        double vpp_bottom;
         double vpp_top;
+        double vpp_bottom;
+        int fs_max; 
+        double fc;
         int no_repetition;
         waveform_mode _waveform_mode;
         double freq;

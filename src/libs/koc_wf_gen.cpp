@@ -9,11 +9,12 @@
 namespace koc
 {
     // public
-    wf_gen::wf_gen(int p_fs_max, int p_adc_bits, double p_vpp_bottom, double p_vpp_top, int p_no_repetition, waveform_mode p_waveform_mode, double p_freq, double p_amp, double p_offset, double p_phase, double p_pulse_width) : 
-        fs_max(p_fs_max),
+    wf_gen::wf_gen(int p_adc_bits, double p_vpp_top, double p_vpp_bottom, int p_fs_max, double p_fc, int p_no_repetition, waveform_mode p_waveform_mode, double p_freq, double p_amp, double p_offset, double p_phase, double p_pulse_width) : 
         adc_bits(p_adc_bits),
-        vpp_bottom(p_vpp_bottom),
         vpp_top(p_vpp_top),
+        vpp_bottom(p_vpp_bottom),
+        fs_max(p_fs_max),
+        fc(p_fc),
         no_repetition(p_no_repetition),
         _waveform_mode(p_waveform_mode),
         freq(p_freq),
@@ -29,7 +30,7 @@ namespace koc
 
     void wf_gen::gen_wf()
     {
-        double dt_fs;
+        double ts;
         double v;
         int fs_per_period_multiple;
 
@@ -37,7 +38,7 @@ namespace koc
         {
             gen_fs_per_period(even_odd_mode::multiples_of_four);
             fs_per_period_multiple = ( (fs_per_period==1) ? fs_per_period : fs_per_period * no_repetition );
-            dt_fs = 1.0/fs;
+            ts = 1.0/fs;
             freq_max_eight_bits = fs_max/256;
             wf_t.reserve(fs_per_period_multiple);
             wf_v.reserve(fs_per_period_multiple);
@@ -46,7 +47,7 @@ namespace koc
 
             for (int i = 0; i < wf_t.capacity(); i++) // generate times
             {
-                wf_t.insert(it_t + i, dt_fs*(i + 1)); // remove start-and-end point error of the algorithm
+                wf_t.insert(it_t + i, ts*(i + 1)); // remove start-and-end point error of the algorithm
             }
 
             for (int i = 0; i < wf_t.capacity(); i++) // generate voltages 
@@ -59,7 +60,7 @@ namespace koc
         {
             gen_fs_per_period(even_odd_mode::multiples_of_four);
             fs_per_period_multiple = ( (fs_per_period==1) ? fs_per_period : fs_per_period * no_repetition );
-            dt_fs = 1.0/fs;
+            ts = 1.0/fs;
             freq_max_eight_bits = fs_max/256;
             wf_t.reserve(fs_per_period_multiple);
             wf_v.reserve(fs_per_period_multiple);
@@ -68,7 +69,7 @@ namespace koc
 
             for (int i = 0; i < wf_t.capacity(); i++) // generate times
             {
-                wf_t.insert(it_t + i, dt_fs*(i + 1)); // remove start-and-end point error of the algorithm
+                wf_t.insert(it_t + i, ts*(i + 1)); // remove start-and-end point error of the algorithm
             }
 
             if ( fs_per_period == 1) // DC mode
@@ -104,7 +105,7 @@ namespace koc
         {
             gen_fs_per_period(even_odd_mode::even);
             fs_per_period_multiple = ( (fs_per_period==1) ? fs_per_period : fs_per_period * no_repetition );
-            dt_fs = 1.0/fs;
+            ts = 1.0/fs;
             freq_max_eight_bits = fs_max/256;
             wf_t.reserve(fs_per_period_multiple); // ramp function is many-to-one function
             wf_v.reserve(fs_per_period_multiple);
@@ -113,7 +114,7 @@ namespace koc
 
             for (int i = 0; i < wf_t.capacity(); i++) // generate times
             {
-                wf_t.insert(it_t + i, dt_fs*(i + 1)); // remove start-and-end point error of the algorithm
+                wf_t.insert(it_t + i, ts*(i + 1)); // remove start-and-end point error of the algorithm
             }
 
             if ( fs_per_period == 1 )
@@ -149,7 +150,7 @@ namespace koc
         {
             gen_fs_per_period(even_odd_mode::even);
             fs_per_period_multiple = ( (fs_per_period==1) ? fs_per_period : fs_per_period * no_repetition );
-            dt_fs = 1.0/fs;
+            ts = 1.0/fs;
             freq_max_eight_bits = fs_max/2;
             wf_t.reserve(fs_per_period_multiple);
             wf_v.reserve(fs_per_period_multiple);
@@ -158,7 +159,7 @@ namespace koc
 
             for (int i = 0; i < wf_t.capacity(); i++) // generate times
             {
-                wf_t.insert(it_t + i, dt_fs*(i + 1)); // remove start-and-end point error of the algorithm
+                wf_t.insert(it_t + i, ts*(i + 1)); // remove start-and-end point error of the algorithm
             }
 
             if ( fs_per_period == 1 )
@@ -194,7 +195,7 @@ namespace koc
         {
             gen_fs_per_period(even_odd_mode::even);
             fs_per_period_multiple = ( (fs_per_period==1) ? fs_per_period : fs_per_period * no_repetition );
-            dt_fs = 1.0/fs;
+            ts = 1.0/fs;
             freq_max_eight_bits = fs_max/3;
             wf_t.reserve(fs_per_period_multiple);
             wf_v.reserve(fs_per_period_multiple);
@@ -203,7 +204,7 @@ namespace koc
 
             for (int i = 0; i < wf_t.capacity(); i++) // generate times
             {
-                wf_t.insert(it_t + i, dt_fs*(i + 1)); // remove start-and-end point error of the algorithm
+                wf_t.insert(it_t + i, ts*(i + 1)); // remove start-and-end point error of the algorithm
             }
 
             if ( fs_per_period == 1 )
@@ -217,7 +218,7 @@ namespace koc
                 int m_period = fs_per_period;
                 int m_phase = (int)( m_period * (double)(phase/360.0) ) - (int)( m_period * (floor)(phase/360.0) );
                 int lead = m_phase;
-                int trail = lead + (int)( floor( pulse_width / dt_fs ) );
+                int trail = lead + (int)( floor( pulse_width / ts ) );
 
                 for (int i = 0; i < wf_v.capacity(); i++) // initialize vector 
                 {
