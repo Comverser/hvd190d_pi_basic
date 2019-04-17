@@ -71,12 +71,12 @@ namespace hvd190d_pi
         digitalWrite(sync, 1); 
     }
 
-    void write_spi(int ch, int v_digital)
+    void write_spi(int ch, unsigned long v_digital)
     {
         write_spi(convert_to_spi(ch, v_digital));
     }
 
-    void write_spi(int ch_p, int v_digital_p, int ch_n, int v_digital_n)
+    void write_spi(int ch_p, unsigned long v_digital_p, int ch_n, unsigned long v_digital_n)
     {
         write_spi(convert_to_spi(ch_p, v_digital_p));
         write_spi(convert_to_spi(ch_n, v_digital_n));
