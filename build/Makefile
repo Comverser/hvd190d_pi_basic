@@ -177,6 +177,33 @@ src/libs/hvd190d_pi_driv.cpp.s:
 	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/hvd190d_pi_driv.cpp.s
 .PHONY : src/libs/hvd190d_pi_driv.cpp.s
 
+src/libs/hvd190d_pi_wf.o: src/libs/hvd190d_pi_wf.cpp.o
+
+.PHONY : src/libs/hvd190d_pi_wf.o
+
+# target to build an object file
+src/libs/hvd190d_pi_wf.cpp.o:
+	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/hvd190d_pi_wf.cpp.o
+.PHONY : src/libs/hvd190d_pi_wf.cpp.o
+
+src/libs/hvd190d_pi_wf.i: src/libs/hvd190d_pi_wf.cpp.i
+
+.PHONY : src/libs/hvd190d_pi_wf.i
+
+# target to preprocess a source file
+src/libs/hvd190d_pi_wf.cpp.i:
+	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/hvd190d_pi_wf.cpp.i
+.PHONY : src/libs/hvd190d_pi_wf.cpp.i
+
+src/libs/hvd190d_pi_wf.s: src/libs/hvd190d_pi_wf.cpp.s
+
+.PHONY : src/libs/hvd190d_pi_wf.s
+
+# target to generate assembly for a file
+src/libs/hvd190d_pi_wf.cpp.s:
+	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/hvd190d_pi_wf.cpp.s
+.PHONY : src/libs/hvd190d_pi_wf.cpp.s
+
 src/libs/koc_wf_gen.o: src/libs/koc_wf_gen.cpp.o
 
 .PHONY : src/libs/koc_wf_gen.o
@@ -219,6 +246,9 @@ help:
 	@echo "... src/libs/hvd190d_pi_driv.o"
 	@echo "... src/libs/hvd190d_pi_driv.i"
 	@echo "... src/libs/hvd190d_pi_driv.s"
+	@echo "... src/libs/hvd190d_pi_wf.o"
+	@echo "... src/libs/hvd190d_pi_wf.i"
+	@echo "... src/libs/hvd190d_pi_wf.s"
 	@echo "... src/libs/koc_wf_gen.o"
 	@echo "... src/libs/koc_wf_gen.i"
 	@echo "... src/libs/koc_wf_gen.s"

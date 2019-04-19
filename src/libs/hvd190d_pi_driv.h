@@ -6,8 +6,6 @@
 
 namespace hvd190d_pi
 {
-    int const delay_loop_pi_ns = 1500; // while loop delay - spi delay
-
     extern clock_t t_start;
     inline int t_lapsed()
     {

@@ -1,31 +1,5 @@
-#include "hvd190d_pi_driv.h" // <wiringPi.h> <iostream>
-#include "koc_wf_gen.h" // <vector>
-
-#include <typeinfo> // debug : typeid().name()
-
-            struct param_wf
-            {
-                int adc_bits;
-                double vpp_top;
-                double vpp_bottom;
-                int fs_max; 
-                double fc;
-                int no_repetition;
-                koc::wf_gen::waveform_mode _waveform_mode;
-                double freq;
-                double amp;
-                double offset;
-                double phase;
-                double pulse_width;
-                std::vector<unsigned long> wf_t_us;
-                std::vector<unsigned long> wf_v_digital;
-                std::vector<int> wf_trig;
-            };
-
-            void reverse_sign_wf_amp(param_wf& p_param_wf)
-            {
-                p_param_wf.amp = -p_param_wf.amp;
-            }
+#include "hvd190d_pi_wf.h" // "koc_wf_gen.h"
+#include "hvd190d_pi_driv.h" // <wiringPi.h>, <iostream>
 
 //////////////////// import csv data //////////////////// 
 #include <sstream> 
@@ -155,76 +129,11 @@ int main(int args_len, char * args[])
         {
             std::cout << "normal trigger mode" << std::endl;
 
-            // x_p
-            param_wf x_p;
-            x_p.adc_bits = 16;
-            x_p.vpp_top = 200;
-            x_p.vpp_bottom = 0;
-            x_p.fs_max = 50000;
-            x_p.fc = 0;
-            x_p.no_repetition = 1;
-            x_p._waveform_mode = koc::wf_gen::waveform_mode::std_triangle;
-            x_p.freq = 100;
-            x_p.amp = 100;
-            x_p.offset = 100;
-            x_p.phase = 0;
-            x_p.pulse_width = 0;
-
-            koc::wf_gen wf_x_p(x_p.adc_bits, x_p.vpp_top, x_p.vpp_bottom, x_p.fs_max, x_p.fc, x_p.no_repetition, x_p._waveform_mode, x_p.freq, x_p.amp, x_p.offset, x_p.phase, x_p.pulse_width);
-            wf_x_p.gen_wf();
-            wf_x_p.gen_wf_t_us();
-            wf_x_p.gen_wf_v_digital();
-            wf_x_p.gen_wf_trig();
-//            wf_x_p.debug_s();
-//            wf_x_p.export_wf(koc::wf_gen::analog_digital_mode::digital);
-
-            x_p.wf_t_us = wf_x_p.get_wf_t_us(); 
-            x_p.wf_v_digital = wf_x_p.get_wf_v_digital();
-            x_p.wf_trig = wf_x_p.get_wf_trig();
-
-            // x_n
-            param_wf x_n = x_p;
-            reverse_sign_wf_amp(x_n);
-
-            koc::wf_gen wf_x_n(x_n.adc_bits, x_n.vpp_top, x_n.vpp_bottom, x_n.fs_max, x_n.fc, x_n.no_repetition, x_n._waveform_mode, x_n.freq, x_n.amp, x_n.offset, x_n.phase, x_n.pulse_width);
-            wf_x_n.gen_wf();
-            wf_x_n.gen_wf_t_us();
-            wf_x_n.gen_wf_v_digital();
-
-            x_n.wf_t_us = wf_x_n.get_wf_t_us(); 
-            x_n.wf_v_digital = wf_x_n.get_wf_v_digital();
-            x_n.wf_trig = wf_x_n.get_wf_trig();
-
-            // y_p
-            param_wf y_p;
-            y_p.adc_bits = 16;
-            y_p.vpp_top = 200;
-            y_p.vpp_bottom = 0;
-            y_p.fs_max = 4;
-            y_p.fc = 0;
-            y_p.no_repetition = 1;
-            y_p._waveform_mode = koc::wf_gen::waveform_mode::std_square;
-            y_p.freq = 2;
-            y_p.amp = 10;
-            y_p.offset = 10;
-            y_p.phase = 0;
-            y_p.pulse_width = 0;
-
-            koc::wf_gen wf_y_p(y_p.adc_bits, y_p.vpp_top, y_p.vpp_bottom, y_p.fs_max, y_p.fc, y_p.no_repetition, y_p._waveform_mode, y_p.freq, y_p.amp, y_p.offset, y_p.phase, y_p.pulse_width);
-            wf_y_p.gen_wf();
-            wf_y_p.gen_wf_t_us();
-            wf_y_p.gen_wf_v_digital();
-            wf_y_p.gen_wf_trig();
-
-            // y_n
-            param_wf y_n = y_p;
-            reverse_sign_wf_amp(y_n);
-
-            koc::wf_gen wf_y_n(y_n.adc_bits, y_n.vpp_top, y_n.vpp_bottom, y_n.fs_max, y_n.fc, y_n.no_repetition, y_n._waveform_mode, y_n.freq, y_n.amp, y_n.offset, y_n.phase, y_n.pulse_width);
-            wf_y_n.gen_wf();
-            wf_y_n.gen_wf_t_us();
-            wf_y_n.gen_wf_v_digital();
-
+            hvd190d_pi::wf wf_main(16,200,0,4,0,koc::wf_gen::waveform_mode::std_triangle,1,100,100,0,0);
+            wf_main.debug_s();
+            wf_main.freq_precision();
+            wf_main.gcd_freq();
+            /*
             // drive 
             while (1)
             {
@@ -237,7 +146,7 @@ int main(int args_len, char * args[])
                     hvd190d_pi::write_spi(2, x_n.wf_v_digital[i]); // take ~3 us
                 }
             }
-
+*/
             break;
         }
         case 4:

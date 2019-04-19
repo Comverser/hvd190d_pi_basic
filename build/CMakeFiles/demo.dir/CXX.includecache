@@ -12,17 +12,19 @@ wiringPi.h
 iostream
 -
 
+../src/libs/hvd190d_pi_wf.h
+koc_wf_gen.h
+../src/libs/koc_wf_gen.h
+
 ../src/libs/koc_wf_gen.h
 vector
 -
 
 /home/pi/dev_s/hvd190d_pi_basic/src/apps/main.cpp
+hvd190d_pi_wf.h
+/home/pi/dev_s/hvd190d_pi_basic/src/apps/hvd190d_pi_wf.h
 hvd190d_pi_driv.h
 /home/pi/dev_s/hvd190d_pi_basic/src/apps/hvd190d_pi_driv.h
-koc_wf_gen.h
-/home/pi/dev_s/hvd190d_pi_basic/src/apps/koc_wf_gen.h
-typeinfo
--
 sstream
 -
 fstream
@@ -43,6 +45,18 @@ wiringPi.h
 -
 iostream
 -
+
+/home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_wf.cpp
+hvd190d_pi_wf.h
+/home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_wf.h
+cmath
+-
+iostream
+-
+
+/home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_wf.h
+koc_wf_gen.h
+/home/pi/dev_s/hvd190d_pi_basic/src/libs/koc_wf_gen.h
 
 /home/pi/dev_s/hvd190d_pi_basic/src/libs/koc_wf_gen.cpp
 koc_wf_gen.h
