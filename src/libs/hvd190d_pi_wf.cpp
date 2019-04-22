@@ -8,14 +8,14 @@ namespace hvd190d_pi
     // public
     wf::wf(int p_adc_bits, double p_vpp_top, double p_vpp_bottom, int p_fs_max_x, double p_fc_x, koc::wf_gen::waveform_mode p_waveform_mode_x, double p_freq_x, double p_amp_x, double p_offset_x, double p_phase_x, double p_pulse_width_x, int p_fs_max_y, double p_fc_y, koc::wf_gen::waveform_mode p_waveform_mode_y, double p_freq_y, double p_amp_y, double p_offset_y, double p_phase_y, double p_pulse_width_y) :
         param_wf_x_p({p_adc_bits, p_vpp_top, p_vpp_bottom, p_fs_max_x, p_fc_x, 1, p_waveform_mode_x, p_freq_x, p_amp_x, p_offset_x, p_phase_x, p_pulse_width_x}),
-        param_wf_x_n({p_adc_bits, p_vpp_top, p_vpp_bottom, p_fs_max_x, p_fc_x, 1, p_waveform_mode_x, p_freq_x, -p_amp_x, p_offset_x, p_phase_x, p_pulse_width_x}),
-        param_wf_y_p({p_adc_bits, p_vpp_top, p_vpp_bottom, p_fs_max_y, p_fc_y, 1, p_waveform_mode_y, p_freq_y, p_amp_y, p_offset_y, p_phase_y, p_pulse_width_y}),
-        param_wf_y_n({p_adc_bits, p_vpp_top, p_vpp_bottom, p_fs_max_y, p_fc_y, 1, p_waveform_mode_y, p_freq_y, -p_amp_y, p_offset_y, p_phase_y, p_pulse_width_y})
+        param_wf_y_p({p_adc_bits, p_vpp_top, p_vpp_bottom, p_fs_max_y, p_fc_y, 1, p_waveform_mode_y, p_freq_y, p_amp_y, p_offset_y, p_phase_y, p_pulse_width_y})
     {
     }
 
-    void wf::freq_precision(int p_precision_decimal_point)
+    void wf::set_freq_precision(int p_precision_decimal_point)
     {
+        std::cout << " -> origin freq1 : " << param_wf_x_p.freq << std::endl;
+        std::cout << " -> origin freq2 : " << param_wf_y_p.freq << std::endl;
         precision_decimal_point = p_precision_decimal_point;
         double m = pow( 10, precision_decimal_point );
         param_wf_x_p.freq = round(param_wf_x_p.freq * m)/m;
@@ -24,9 +24,12 @@ namespace hvd190d_pi
         std::cout << " -> freq2 : " << param_wf_y_p.freq << std::endl;
     }
 
-    double wf::gcd_freq()
+    void wf::gcd_freq()
     {
+        double period_gcd;
         double m = pow( 10, precision_decimal_point );
+        int gcd = 1;
+
         int f1 = (int)(param_wf_x_p.freq * m);
         int f2 = (int)(param_wf_y_p.freq * m);
         if ( f1 == 0 | f2 == 0 )
@@ -36,7 +39,6 @@ namespace hvd190d_pi
         std::cout << " -> f1 : " << f1 << std::endl;
         std::cout << " -> f2 : " << f2 << std::endl;
 
-        int gcd = 1;
 
         for (int i=1; i <= f1 && i <= f2; ++i)
         {
@@ -45,9 +47,19 @@ namespace hvd190d_pi
                 gcd = i;
             }
         }
+        period_gcd = 1.0/( (double)gcd/m );
         std::cout << " -> gcd : " << gcd/m << std::endl;
-        std::cout << " -> period_gcd : " << 1.0/(gcd/m) << std::endl;
-        return 1.0/( (double)gcd/m );
+        std::cout << " -> period_gcd : " << period_gcd << std::endl;
+        param_wf_x_p.no_repetition = param_wf_x_p.freq * period_gcd;
+        param_wf_y_p.no_repetition = param_wf_y_p.freq * period_gcd;
+    }
+
+    void wf::update_param()
+    {
+        param_wf_x_n = param_wf_x_p;
+        param_wf_y_n = param_wf_y_p;
+        param_wf_x_n.amp = -param_wf_x_p.amp;
+        param_wf_y_n.amp = -param_wf_y_p.amp;
     }
 
     // private

@@ -129,10 +129,11 @@ int main(int args_len, char * args[])
         {
             std::cout << "normal trigger mode" << std::endl;
 
-            hvd190d_pi::wf wf_main(16,200,0,4,0,koc::wf_gen::waveform_mode::std_triangle,1,100,100,0,0);
-            wf_main.debug_s();
-            wf_main.freq_precision();
+            hvd190d_pi::wf wf_main(16,200,0,4,0,koc::wf_gen::waveform_mode::std_triangle,1.46,100,100,0,0);
+            wf_main.set_freq_precision();
             wf_main.gcd_freq();
+            wf_main.update_param();
+            wf_main.debug_s();
             /*
             // drive 
             while (1)
