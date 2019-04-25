@@ -58,7 +58,7 @@ namespace koc
         std::vector<int> get_wf_trig();
         void export_wf(analog_digital_mode p_analog_digital_mode);
         double get_freq_max_eight_bits();
-        void debug_s();
+        void debug();
     private:
         int adc_bits;
         double vpp_top;

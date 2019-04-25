@@ -8,27 +8,54 @@ namespace hvd190d_pi
     class wf
     {
     public:
-        wf(int p_adc_bits, double p_vpp_top, double p_vpp_bottom, int p_fs_max_x, double p_fc_x, koc::wf_gen::waveform_mode p_waveform_mode_x, double p_freq_x, double p_amp_x, double p_offset_x, double p_phase_x, double p_pulse_width_x = 0.0, int p_fs_max_y = 0, double p_fc_y = 100000.0, koc::wf_gen::waveform_mode p_waveform_mode_y = koc::wf_gen::waveform_mode::std_sine, double p_freq_y = 0.0, double p_amp_y = 0.0, double p_offset_y = 0.0, double p_phase_y = 0.0, double p_pulse_width_y = 0.0);
+        wf(int p_adc_bits = 16, double p_vpp_top = 200.0, double p_vpp_bottom = 0.0, 
+            int p_fs_max_x = 0, double p_fc_x = 0.0, koc::wf_gen::waveform_mode p_waveform_mode_x = koc::wf_gen::waveform_mode::std_sine, double p_freq_x = 0.0, double p_amp_x = 0.0, double p_offset_x = 0.0, double p_phase_x = 0.0, double p_pulse_width_x = 0.0, 
+            int p_fs_max_y = 0, double p_fc_y = 0.0, koc::wf_gen::waveform_mode p_waveform_mode_y = koc::wf_gen::waveform_mode::std_sine, double p_freq_y = 0.0, double p_amp_y = 0.0, double p_offset_y = 0.0, double p_phase_y = 0.0, double p_pulse_width_y = 0.0);
 
-        void set_freq_precision(int p_precision_decimal_point = 1);
-        void gcd_freq();
-        void update_param();
+        bool is_x_on;
+        bool is_y_on;
+        bool is_x_trig_on;
+        bool is_y_trig_on;
 
-        void debug_check_params(koc::wf_gen::param_wf& p_ref_param_wf);
+        void set_is_x_on(bool p_is_x_on);
+        void set_is_y_on(bool p_is_y_on);
+        void set_is_x_trig_on(bool p_is_x_trig_on);
+        void set_is_y_trig_on(bool p_is_y_trig_on);
+        void set_param_wf(int xy, int p_fs_max, double p_fc, int p_waveform_mode, double p_freq, double p_amp, double p_offset, double p_phase, double p_pulse_width = 0);
+
+//        void drive_mems();
+//        void soft_start_end();
+        void run_wf_differential();
+
         void debug_s();
 
     private:
         int precision_decimal_point;
 
+        std::vector<int> sorted_data_wf_ch;
+        std::vector<unsigned long> sorted_data_wf_t_us;
+        std::vector<unsigned long> sorted_data_wf_v_digital_p;
+        std::vector<unsigned long> sorted_data_wf_v_digital_n;
+        std::vector<int> sorted_data_wf_trig_x;
+        std::vector<int> sorted_data_wf_trig_y;
+
         koc::wf_gen::param_wf param_wf_x_p;
-        koc::wf_gen::param_wf param_wf_x_n;
         koc::wf_gen::param_wf param_wf_y_p;
-        koc::wf_gen::param_wf param_wf_y_n;
         koc::wf_gen::data_wf_digital data_wf_digital_x_p;
         koc::wf_gen::data_wf_digital data_wf_digital_x_n;
         koc::wf_gen::data_wf_digital data_wf_digital_y_p;
         koc::wf_gen::data_wf_digital data_wf_digital_y_n;
 
+        void set_freq_precision(int p_precision_decimal_point = 1);
+        double calc_period_gcd_freq();
+        void calc_no_repetition();
+        void set_no_repetition();
+        void gen_wf_differential_pn(koc::wf_gen::param_wf param_wf_p, koc::wf_gen::data_wf_digital& ref_data_wf_p, koc::wf_gen::data_wf_digital& ref_data_wf_n, bool p_is_trig_on);
+        void gen_wf_differential(bool p_is_on, koc::wf_gen::param_wf param_wf_p, koc::wf_gen::data_wf_digital& ref_data_wf_p, koc::wf_gen::data_wf_digital& ref_data_wf_n, bool p_is_trig_on);
+
+        koc::wf_gen::waveform_mode translate_waveform_mode(int int_wf_mod);
+
+        void debug_check_params(koc::wf_gen::param_wf& p_ref_param_wf);
     };
 }
 

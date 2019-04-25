@@ -378,12 +378,15 @@ namespace koc
         return freq_max_eight_bits;
     }
 
-    void wf_gen::debug_s()
+    void wf_gen::debug()
     {
-        std::cout << "//////////////////// debug_s()" << std::endl;
+        std::cout << std::endl;
+        std::cout << "//////////////////// koc_wf_gen : debug() ////////////////////" << std::endl;
+        std::cout << std::endl;
+
         if( wf_t.empty() )
         {
-            std::cout << "empty" << std::endl;
+            std::cout << "--> empty" << std::endl;
         }
         else
         {
@@ -399,6 +402,7 @@ namespace koc
             std::cout << std::endl;
             std::cout << std::endl;
             std::cout << std::endl;
+            /*
             for (int i = 0; i < wf_t_us.size(); i++)
             {
                 std::cout << i << " wf_t_us[" << i << "] : " << wf_t_us[i] << std::endl;
@@ -411,6 +415,7 @@ namespace koc
             std::cout << std::endl;
             std::cout << std::endl;
             std::cout << std::endl;
+            */
             for (int i = 0; i < wf_trig.size(); i++)
             {
                 std::cout << i << " wf_trig[" << i << "] : " << wf_trig[i] << std::endl;
@@ -434,6 +439,10 @@ namespace koc
         std::cout << " - wf_v_digital.size()     : " << wf_v_digital.size() << std::endl;
         std::cout << " - wf_trig.capacity() : " << wf_trig.capacity() << std::endl;
         std::cout << " - wf_trig.size()     : " << wf_trig.size() << std::endl;
+
+        std::cout << std::endl;
+        std::cout << "//////////////////// koc_wf_gen : debug() ////////////////////" << std::endl;
+        std::cout << std::endl;
     }
     
     // private
