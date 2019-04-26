@@ -130,11 +130,11 @@ int main(int args_len, char * args[])
             std::cout << "normal trigger mode" << std::endl;
 
             hvd190d_pi::wf wf_main(16,200,0,4,100000.0,koc::wf_gen::waveform_mode::std_triangle,1,100,100,0,0);
-            wf_main.set_is_x_on(true);
+//            wf_main.set_is_x_on(true);
             wf_main.set_is_y_on(true);
-//            wf_main.set_is_x_trig_on(true);
-            wf_main.set_is_y_trig_on(true);
-            wf_main.set_param_wf(1, 0, 0, 0, 0, 100, 10, 0);
+            wf_main.set_is_x_trig_on(true);
+//            wf_main.set_is_y_trig_on(true);
+//            wf_main.set_param_wf(1, 0, 0, 0, 0, 100, 10, 0);
             wf_main.run_wf_differential();
             wf_main.debug_s();
             /*

@@ -70,8 +70,8 @@ namespace hvd190d_pi
     {
         set_freq_precision();
         set_no_repetition();
-        gen_wf_differential(is_x_on, param_wf_x_p, data_wf_digital_x_p, data_wf_digital_x_n, is_x_trig_on);
-        gen_wf_differential(is_y_on, param_wf_y_p, data_wf_digital_y_p, data_wf_digital_y_n, is_y_trig_on);
+        gen_wf_differential(is_x_on, param_wf_x_p, x_data_wf, is_x_trig_on);
+        gen_wf_differential(is_y_on, param_wf_y_p, y_data_wf, is_y_trig_on);
     }
 
     void wf::debug_s()
@@ -136,7 +136,7 @@ namespace hvd190d_pi
         }
     }
 
-    void wf::gen_wf_differential_pn(koc::wf_gen::param_wf param_wf_p, koc::wf_gen::data_wf_digital& ref_data_wf_p, koc::wf_gen::data_wf_digital& ref_data_wf_n, bool p_is_trig_on)
+    void wf::gen_wf_differential_pn(koc::wf_gen::param_wf param_wf_p, data_wf_digital& ref_data_wf_digital, bool p_is_trig_on)
     {
             // p
             koc::wf_gen wf_p(param_wf_p.adc_bits, param_wf_p.vpp_top, param_wf_p.vpp_bottom, param_wf_p.fs_max, param_wf_p.fc, param_wf_p.no_repetition, param_wf_p._waveform_mode, param_wf_p.freq, param_wf_p.amp, param_wf_p.offset, param_wf_p.phase, param_wf_p.pulse_width);
@@ -148,9 +148,9 @@ namespace hvd190d_pi
                 wf_p.gen_wf_trig();
             }
 
-            ref_data_wf_p.wf_t_us = wf_p.get_wf_t_us(); 
-            ref_data_wf_p.wf_v_digital = wf_p.get_wf_v_digital();
-            ref_data_wf_p.wf_trig = wf_p.get_wf_trig();
+            ref_data_wf_digital.p.wf_t_us = wf_p.get_wf_t_us(); 
+            ref_data_wf_digital.p.wf_v_digital = wf_p.get_wf_v_digital();
+            ref_data_wf_digital.p.wf_trig = wf_p.get_wf_trig();
 
             // n
             koc::wf_gen wf_n(param_wf_p.adc_bits, param_wf_p.vpp_top, param_wf_p.vpp_bottom, param_wf_p.fs_max, param_wf_p.fc, param_wf_p.no_repetition, param_wf_p._waveform_mode, param_wf_p.freq, -param_wf_p.amp, param_wf_p.offset, param_wf_p.phase, param_wf_p.pulse_width);
@@ -158,17 +158,21 @@ namespace hvd190d_pi
             wf_n.gen_wf_t_us();
             wf_n.gen_wf_v_digital();
 
-            ref_data_wf_n.wf_v_digital = wf_n.get_wf_v_digital();
+            ref_data_wf_digital.n.wf_v_digital = wf_n.get_wf_v_digital();
 
             wf_p.debug();
     }
 
-    void wf::gen_wf_differential(bool p_is_on, koc::wf_gen::param_wf param_wf_p, koc::wf_gen::data_wf_digital& ref_data_wf_p, koc::wf_gen::data_wf_digital& ref_data_wf_n, bool p_is_trig_on)
+    void wf::gen_wf_differential(bool p_is_on, koc::wf_gen::param_wf param_wf_p, data_wf_digital& ref_data_wf_digital, bool p_is_trig_on)
     {
         if ( p_is_on == true )
         {
-            gen_wf_differential_pn(param_wf_p, ref_data_wf_p, ref_data_wf_n, p_is_trig_on);
+            gen_wf_differential_pn(param_wf_p, ref_data_wf_digital, p_is_trig_on);
         }
+    }
+
+    void wf::sort_wf_differential(sorted_cmd_wf& ref_sorted_cmd, data_wf_digital p_x, data_wf_digital p_y)
+    {
     }
 
     koc::wf_gen::waveform_mode wf::translate_waveform_mode(int int_wf_mod)
@@ -224,6 +228,3 @@ namespace hvd190d_pi
 
 
 }
-
-// loop delay compensation
-//

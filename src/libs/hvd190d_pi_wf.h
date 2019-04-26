@@ -32,26 +32,34 @@ namespace hvd190d_pi
     private:
         int precision_decimal_point;
 
-        std::vector<int> sorted_data_wf_ch;
-        std::vector<unsigned long> sorted_data_wf_t_us;
-        std::vector<unsigned long> sorted_data_wf_v_digital_p;
-        std::vector<unsigned long> sorted_data_wf_v_digital_n;
-        std::vector<int> sorted_data_wf_trig_x;
-        std::vector<int> sorted_data_wf_trig_y;
+        struct sorted_cmd_wf
+        {
+            std::vector<unsigned long> t_us;
+            std::vector<unsigned long> cmd_wf_p;
+            std::vector<unsigned long> cmd_wf_n;
+            std::vector<int> trig_x;
+            std::vector<int> trig_y;
+        };
+        sorted_cmd_wf _sorted_cmd_wf;
 
         koc::wf_gen::param_wf param_wf_x_p;
         koc::wf_gen::param_wf param_wf_y_p;
-        koc::wf_gen::data_wf_digital data_wf_digital_x_p;
-        koc::wf_gen::data_wf_digital data_wf_digital_x_n;
-        koc::wf_gen::data_wf_digital data_wf_digital_y_p;
-        koc::wf_gen::data_wf_digital data_wf_digital_y_n;
+
+        struct data_wf_digital
+        {
+            koc::wf_gen::data_wf_digital p;
+            koc::wf_gen::data_wf_digital n;
+        };
+        data_wf_digital x_data_wf;
+        data_wf_digital y_data_wf;
 
         void set_freq_precision(int p_precision_decimal_point = 1);
         double calc_period_gcd_freq();
         void calc_no_repetition();
         void set_no_repetition();
-        void gen_wf_differential_pn(koc::wf_gen::param_wf param_wf_p, koc::wf_gen::data_wf_digital& ref_data_wf_p, koc::wf_gen::data_wf_digital& ref_data_wf_n, bool p_is_trig_on);
-        void gen_wf_differential(bool p_is_on, koc::wf_gen::param_wf param_wf_p, koc::wf_gen::data_wf_digital& ref_data_wf_p, koc::wf_gen::data_wf_digital& ref_data_wf_n, bool p_is_trig_on);
+        void gen_wf_differential_pn(koc::wf_gen::param_wf param_wf_p, data_wf_digital& ref_data_wf_digital, bool p_is_trig_on);
+        void gen_wf_differential(bool p_is_on, koc::wf_gen::param_wf param_wf_p, data_wf_digital& ref_data_wf_digital, bool p_is_trig_on);
+        void sort_wf_differential(sorted_cmd_wf& ref_sorted_cmd, data_wf_digital p_x, data_wf_digital p_y);
 
         koc::wf_gen::waveform_mode translate_waveform_mode(int int_wf_mod);
 
