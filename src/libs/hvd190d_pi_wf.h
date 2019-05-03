@@ -16,11 +16,13 @@ namespace hvd190d_pi
         bool is_y_on;
         bool is_x_trig_on;
         bool is_y_trig_on;
+        bool is_diff_on;
 
         void set_is_x_on(bool p_is_x_on);
         void set_is_y_on(bool p_is_y_on);
         void set_is_x_trig_on(bool p_is_x_trig_on);
         void set_is_y_trig_on(bool p_is_y_trig_on);
+        void set_is_diff_on(bool p_is_diff_on);
         void set_param_wf(int xy, int p_fs_max, double p_fc, int p_waveform_mode, double p_freq, double p_amp, double p_offset, double p_phase, double p_pulse_width = 0);
 
 //        void drive_mems();
@@ -62,11 +64,17 @@ namespace hvd190d_pi
         void sort_wf_differential_xy(sorted_cmd_wf& ref_sorted_cmd, data_wf_digital_pn& ref_x, data_wf_digital_pn& ref_y);
         void sort_wf_differential(bool p_is_x_on, bool p_is_y_on, sorted_cmd_wf& ref_sorted_cmd, data_wf_digital_pn& ref_x, data_wf_digital_pn& ref_y);
 
-//        std::vector<unsigned long> convert_to_cmd_dac(int ch, std::vector<unsigned long>& ref_v_digital);
+        inline unsigned long convert_to_cmd_dac_quad_datum(int ch, unsigned long v_digital) const
+        {
+            return 0x100000 | ( ( (0x000000 | (ch)) << 16) | v_digital); // channel number starts from zero
+        }
+
+        std::vector<unsigned long> convert_to_cmd_dac_quad_vector(int ch, std::vector<unsigned long> v_digital);
 
         koc::wf_gen::waveform_mode translate_waveform_mode(int int_wf_mod);
 
         void debug_check_params(koc::wf_gen::param_wf& p_ref_param_wf);
+        void debug_check_sorted_cmd_wf();
     };
 }
 

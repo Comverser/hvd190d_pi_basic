@@ -12,7 +12,8 @@ namespace hvd190d_pi
         is_x_on(false),
         is_y_on(false),
         is_x_trig_on(false),
-        is_y_trig_on(false)
+        is_y_trig_on(false),
+        is_diff_on(false)
     {
     }
 
@@ -34,6 +35,11 @@ namespace hvd190d_pi
     void wf::set_is_y_trig_on(bool p_is_y_trig_on)
     {
         is_y_trig_on = p_is_y_trig_on;
+    }
+
+    void wf::set_is_diff_on(bool p_is_diff_on)
+    {
+        is_diff_on = p_is_diff_on;
     }
 
     void wf::set_param_wf(int xy, int p_fs_max, double p_fc, int p_waveform_mode, double p_freq, double p_amp, double p_offset, double p_phase, double p_pulse_width)
@@ -79,6 +85,7 @@ namespace hvd190d_pi
     {
         debug_check_params(param_wf_x_p);
         debug_check_params(param_wf_y_p);
+        debug_check_sorted_cmd_wf();
     }
 
     // private
@@ -153,15 +160,20 @@ namespace hvd190d_pi
             ref_data_wf_digital_pn.p.wf_v_digital = wf_p.get_wf_v_digital();
             ref_data_wf_digital_pn.p.wf_trig = wf_p.get_wf_trig();
 
-            // n
-            koc::wf_gen wf_n(param_wf_p.adc_bits, param_wf_p.vpp_top, param_wf_p.vpp_bottom, param_wf_p.fs_max, param_wf_p.fc, param_wf_p.no_repetition, param_wf_p._waveform_mode, param_wf_p.freq, -param_wf_p.amp, param_wf_p.offset, param_wf_p.phase, param_wf_p.pulse_width);
-            wf_n.gen_wf();
-            wf_n.gen_wf_t_us();
-            wf_n.gen_wf_v_digital();
-
-            ref_data_wf_digital_pn.n.wf_v_digital = wf_n.get_wf_v_digital();
-
             wf_p.debug();
+
+            // n
+            if (is_diff_on == true)
+            {
+                koc::wf_gen wf_n(param_wf_p.adc_bits, param_wf_p.vpp_top, param_wf_p.vpp_bottom, param_wf_p.fs_max, param_wf_p.fc, param_wf_p.no_repetition, param_wf_p._waveform_mode, param_wf_p.freq, -param_wf_p.amp, param_wf_p.offset, param_wf_p.phase, param_wf_p.pulse_width);
+                wf_n.gen_wf();
+                wf_n.gen_wf_t_us();
+                wf_n.gen_wf_v_digital();
+
+                ref_data_wf_digital_pn.n.wf_v_digital = wf_n.get_wf_v_digital();
+
+                wf_n.debug();
+            }
     }
 
     void wf::gen_wf_differential(bool p_is_on, koc::wf_gen::param_wf param_wf_p, data_wf_digital_pn& ref_data_wf_digital_pn, bool p_is_trig_on)
@@ -182,16 +194,35 @@ namespace hvd190d_pi
         {
             sort_wf_differential_xy(ref_sorted_cmd, ref_x, ref_y);
         }
-        else
+        else if (p_is_x_on == true)
         {
+            _sorted_cmd_wf.t_us = x_data_wf.p.wf_t_us;
+            _sorted_cmd_wf.cmd_wf_p = convert_to_cmd_dac_quad_vector(0, x_data_wf.p.wf_v_digital);
+            _sorted_cmd_wf.cmd_wf_n = convert_to_cmd_dac_quad_vector(1, x_data_wf.n.wf_v_digital);
+            _sorted_cmd_wf.trig_x = x_data_wf.p.wf_trig;
+        }
+        else if (p_is_y_on == true)
+        {
+            _sorted_cmd_wf.t_us = y_data_wf.p.wf_t_us;
+            _sorted_cmd_wf.cmd_wf_p = convert_to_cmd_dac_quad_vector(2, y_data_wf.p.wf_v_digital);
+            _sorted_cmd_wf.cmd_wf_n = convert_to_cmd_dac_quad_vector(3, y_data_wf.n.wf_v_digital);
+            _sorted_cmd_wf.trig_y = y_data_wf.p.wf_trig;
         }
     }
 
-    /*
-    std::vector<unsigned long> wf::convert_to_cmd_dac(int ch, std::vector<unsigned long>& ref_v_digital)
+    std::vector<unsigned long> wf::convert_to_cmd_dac_quad_vector(int ch, std::vector<unsigned long> v_digital)
     {
+        std::vector<unsigned long> buffer;
+        buffer.reserve(v_digital.size());
+        auto it = buffer.begin();
+
+        for (int i = 0; i < buffer.capacity(); i++)
+        {
+            buffer.insert( it + i, convert_to_cmd_dac_quad_datum(ch, v_digital[i]) );
+        }
+
+        return buffer;
     }
-    */
 
     koc::wf_gen::waveform_mode wf::translate_waveform_mode(int int_wf_mod)
     {
@@ -244,5 +275,24 @@ namespace hvd190d_pi
         std::cout << std::endl;
     }
 
+    void wf::debug_check_sorted_cmd_wf()
+    {
+        std::cout << "//////////////////// debug_check_sorted_cmd_wf()" << std::endl;
+
+        for (auto i : _sorted_cmd_wf.t_us)
+            std::cout << "t_us : " << i << std::endl;
+
+        for (auto i : _sorted_cmd_wf.cmd_wf_p)
+            std::cout << "cmd_wf_p : " << i << std::endl;
+
+        for (auto i : _sorted_cmd_wf.cmd_wf_n)
+            std::cout << "cmd_wf_n : " << i << std::endl;
+
+        for (auto i : _sorted_cmd_wf.trig_x)
+            std::cout << "trig_x : " << i << std::endl;
+
+        for (auto i : _sorted_cmd_wf.trig_y)
+            std::cout << "trig_y : " << i << std::endl;
+    }
 
 }
