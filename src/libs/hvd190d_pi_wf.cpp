@@ -2,6 +2,7 @@
 //#include "hvd190d_pi_driv.h" // <wiringPi.h>, <iostream>
 #include <cmath>
 #include <iostream> // for debug
+#include <bitset> // for use of bitset function
 
 namespace hvd190d_pi
 {
@@ -174,6 +175,10 @@ namespace hvd190d_pi
 
                 wf_n.debug();
             }
+            else
+            {
+                ref_data_wf_digital_pn.n = {};
+            }
     }
 
     void wf::gen_wf_differential(bool p_is_on, koc::wf_gen::param_wf param_wf_p, data_wf_digital_pn& ref_data_wf_digital_pn, bool p_is_trig_on)
@@ -181,6 +186,10 @@ namespace hvd190d_pi
         if ( p_is_on == true )
         {
             gen_wf_differential_pn(param_wf_p, ref_data_wf_digital_pn, p_is_trig_on);
+        }
+        else
+        {
+            ref_data_wf_digital_pn = {};
         }
     }
 
@@ -200,13 +209,19 @@ namespace hvd190d_pi
             _sorted_cmd_wf.cmd_wf_p = convert_to_cmd_dac_quad_vector(0, x_data_wf.p.wf_v_digital);
             _sorted_cmd_wf.cmd_wf_n = convert_to_cmd_dac_quad_vector(1, x_data_wf.n.wf_v_digital);
             _sorted_cmd_wf.trig_x = x_data_wf.p.wf_trig;
+            _sorted_cmd_wf.trig_y.clear();
         }
         else if (p_is_y_on == true)
         {
             _sorted_cmd_wf.t_us = y_data_wf.p.wf_t_us;
             _sorted_cmd_wf.cmd_wf_p = convert_to_cmd_dac_quad_vector(2, y_data_wf.p.wf_v_digital);
             _sorted_cmd_wf.cmd_wf_n = convert_to_cmd_dac_quad_vector(3, y_data_wf.n.wf_v_digital);
+            _sorted_cmd_wf.trig_x.clear();
             _sorted_cmd_wf.trig_y = y_data_wf.p.wf_trig;
+        }
+        else
+        {
+            _sorted_cmd_wf = {};
         }
     }
 
@@ -283,10 +298,10 @@ namespace hvd190d_pi
             std::cout << "t_us : " << i << std::endl;
 
         for (auto i : _sorted_cmd_wf.cmd_wf_p)
-            std::cout << "cmd_wf_p : " << i << std::endl;
+            std::cout << "cmd_wf_p : " << std::bitset<24>(i) << std::endl;
 
         for (auto i : _sorted_cmd_wf.cmd_wf_n)
-            std::cout << "cmd_wf_n : " << i << std::endl;
+            std::cout << "cmd_wf_n : " << std::bitset<24>(i) << std::endl;
 
         for (auto i : _sorted_cmd_wf.trig_x)
             std::cout << "trig_x : " << i << std::endl;

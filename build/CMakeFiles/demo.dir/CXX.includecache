@@ -53,6 +53,8 @@ cmath
 -
 iostream
 -
+bitset
+-
 
 /home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_wf.h
 koc_wf_gen.h

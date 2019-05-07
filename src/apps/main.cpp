@@ -130,14 +130,39 @@ int main(int args_len, char * args[])
             std::cout << "normal trigger mode" << std::endl;
 
             hvd190d_pi::wf wf_main(16,200,0,4,100000.0,koc::wf_gen::waveform_mode::std_triangle,1,100,100,0,0);
-//            wf_main.set_is_x_on(true);
-            wf_main.set_is_y_on(true);
-//            wf_main.set_is_x_trig_on(true);
+            wf_main.set_is_x_on(true);
+//            wf_main.set_is_y_on(true);
+            wf_main.set_is_x_trig_on(true);
 //            wf_main.set_is_y_trig_on(true);
-//            wf_main.set_param_wf(1, 0, 0, 0, 0, 100, 10, 0);
             wf_main.set_is_diff_on(true);
+
+            std::cout << "//////////////////// 0 x only" << std::endl;
             wf_main.run_wf_differential();
             wf_main.debug_s();
+
+            /*
+            std::cout << "//////////////////// 1 param changed wf reduced" << std::endl;
+            wf_main.set_param_wf(0, 0, 0, 0, 0, 100, 10, 0);
+//            wf_main.set_param_wf(1, 4, 100000, 1, 1, 100, 100, 0);
+            wf_main.run_wf_differential();
+            wf_main.debug_s();
+            */
+
+            std::cout << "//////////////////// 2 trig/diff X" << std::endl;
+            wf_main.set_is_x_on(true);
+//            wf_main.set_is_y_on(true);
+            wf_main.set_is_x_trig_on(false);
+//            wf_main.set_is_y_trig_on(false);
+            wf_main.set_is_diff_on(false);
+            wf_main.run_wf_differential();
+            wf_main.debug_s();
+
+            std::cout << "//////////////////// 3 x deleted" << std::endl;
+            wf_main.set_is_x_on(false);
+            wf_main.set_is_y_on(false);
+            wf_main.run_wf_differential();
+            wf_main.debug_s();
+
             /*
             // drive 
             while (1)
