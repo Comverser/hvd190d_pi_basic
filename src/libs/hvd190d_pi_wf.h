@@ -18,6 +18,16 @@ namespace hvd190d_pi
         bool is_y_trig_on;
         bool is_diff_on;
 
+        struct sorted_cmd_wf
+        {
+            std::vector<unsigned long> t_us;
+            std::vector<unsigned long> cmd_wf_p;
+            std::vector<unsigned long> cmd_wf_n;
+            std::vector<int> trig_x;
+            std::vector<int> trig_y;
+        };
+        sorted_cmd_wf _sorted_cmd_wf;
+
         void set_is_x_on(bool p_is_x_on);
         void set_is_y_on(bool p_is_y_on);
         void set_is_x_trig_on(bool p_is_x_trig_on);
@@ -33,16 +43,6 @@ namespace hvd190d_pi
 
     private:
         int precision_decimal_point;
-
-        struct sorted_cmd_wf
-        {
-            std::vector<unsigned long> t_us;
-            std::vector<unsigned long> cmd_wf_p;
-            std::vector<unsigned long> cmd_wf_n;
-            std::vector<int> trig_x;
-            std::vector<int> trig_y;
-        };
-        sorted_cmd_wf _sorted_cmd_wf;
 
         koc::wf_gen::param_wf param_wf_x_p;
         koc::wf_gen::param_wf param_wf_y_p;

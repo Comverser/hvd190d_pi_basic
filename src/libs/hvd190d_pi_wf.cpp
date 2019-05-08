@@ -2,7 +2,7 @@
 //#include "hvd190d_pi_driv.h" // <wiringPi.h>, <iostream>
 #include <cmath>
 #include <iostream> // for debug
-#include <bitset> // for use of bitset function
+#include <bitset> // for debug : use of bitset function
 
 namespace hvd190d_pi
 {
@@ -84,9 +84,9 @@ namespace hvd190d_pi
 
     void wf::debug_s()
     {
-        debug_check_params(param_wf_x_p);
-        debug_check_params(param_wf_y_p);
-        debug_check_sorted_cmd_wf();
+//        debug_check_params(param_wf_x_p);
+//        debug_check_params(param_wf_y_p);
+//        debug_check_sorted_cmd_wf();
     }
 
     // private
@@ -161,7 +161,7 @@ namespace hvd190d_pi
             ref_data_wf_digital_pn.p.wf_v_digital = wf_p.get_wf_v_digital();
             ref_data_wf_digital_pn.p.wf_trig = wf_p.get_wf_trig();
 
-            wf_p.debug();
+//            wf_p.debug();
 
             // n
             if (is_diff_on == true)
@@ -173,7 +173,7 @@ namespace hvd190d_pi
 
                 ref_data_wf_digital_pn.n.wf_v_digital = wf_n.get_wf_v_digital();
 
-                wf_n.debug();
+//                wf_n.debug();
             }
             else
             {
@@ -195,6 +195,71 @@ namespace hvd190d_pi
 
     void wf::sort_wf_differential_xy(sorted_cmd_wf& ref_sorted_cmd, data_wf_digital_pn& ref_x, data_wf_digital_pn& ref_y)
     {
+        int size_wf_t_p = ref_x.p.wf_t_us.size() + ref_y.p.wf_t_us.size(); 
+
+//        ref_sorted_cmd.trig_x.reserve(size_wf_t_p);
+//        ref_sorted_cmd.trig_y.reserve(size_wf_t_p);
+
+        ref_sorted_cmd.t_us.reserve(size_wf_t_p);
+        auto it_wf_t = ref_sorted_cmd.t_us.begin();
+
+        if (is_diff_on == false)
+        {
+            ref_sorted_cmd.cmd_wf_p.reserve(size_wf_t_p);
+
+            int j = 0;
+            int k = 0;
+            auto it_cmd_wf_p = ref_sorted_cmd.cmd_wf_p.begin();
+
+            for (int i = 0; i < ref_sorted_cmd.t_us.capacity(); i++)
+            {
+                if ( ((ref_x.p.wf_t_us[j] <= ref_y.p.wf_t_us[k]) && (j < ref_x.p.wf_t_us.size())) || k == ref_y.p.wf_t_us.size() )
+                {
+                    ref_sorted_cmd.t_us.insert( it_wf_t + i, ref_x.p.wf_t_us[j] );
+                    ref_sorted_cmd.cmd_wf_p.insert( it_cmd_wf_p + i, convert_to_cmd_dac_quad_datum(0, ref_x.p.wf_v_digital[j]) );
+
+                    j++;
+                }
+                else
+                {
+                    ref_sorted_cmd.t_us.insert( it_wf_t + i, ref_y.p.wf_t_us[k] );
+                    ref_sorted_cmd.cmd_wf_p.insert( it_cmd_wf_p + i, convert_to_cmd_dac_quad_datum(2, ref_y.p.wf_v_digital[k]) );
+
+                    k++;
+                }
+            }
+        }
+        else
+        {
+            ref_sorted_cmd.cmd_wf_p.reserve(size_wf_t_p);
+            ref_sorted_cmd.cmd_wf_n.reserve(size_wf_t_p);
+
+            int j = 0;
+            int k = 0;
+            auto it_cmd_wf_p = ref_sorted_cmd.cmd_wf_p.begin();
+            auto it_cmd_wf_n = ref_sorted_cmd.cmd_wf_n.begin();
+
+            for (int i = 0; i < ref_sorted_cmd.t_us.capacity(); i++)
+            {
+                if ( ((ref_x.p.wf_t_us[j] <= ref_y.p.wf_t_us[k]) && (j < ref_x.p.wf_t_us.size())) || k == ref_y.p.wf_t_us.size() )
+                {
+                    ref_sorted_cmd.t_us.insert( it_wf_t + i, ref_x.p.wf_t_us[j] );
+                    ref_sorted_cmd.cmd_wf_p.insert( it_cmd_wf_p + i, convert_to_cmd_dac_quad_datum(0, ref_x.p.wf_v_digital[j]) );
+                    ref_sorted_cmd.cmd_wf_n.insert( it_cmd_wf_n + i, convert_to_cmd_dac_quad_datum(1, ref_x.n.wf_v_digital[j]) );
+
+                    j++;
+                }
+                else
+                {
+                    ref_sorted_cmd.t_us.insert( it_wf_t + i, ref_y.p.wf_t_us[k] );
+                    ref_sorted_cmd.cmd_wf_p.insert( it_cmd_wf_p + i, convert_to_cmd_dac_quad_datum(2, ref_y.p.wf_v_digital[k]) );
+                    ref_sorted_cmd.cmd_wf_n.insert( it_cmd_wf_n + i, convert_to_cmd_dac_quad_datum(3, ref_y.n.wf_v_digital[k]) );
+
+                    k++;
+                }
+            }
+        }
+
     }
 
     void wf::sort_wf_differential(bool p_is_x_on, bool p_is_y_on, sorted_cmd_wf& ref_sorted_cmd, data_wf_digital_pn& ref_x, data_wf_digital_pn& ref_y)
@@ -205,23 +270,23 @@ namespace hvd190d_pi
         }
         else if (p_is_x_on == true)
         {
-            _sorted_cmd_wf.t_us = x_data_wf.p.wf_t_us;
-            _sorted_cmd_wf.cmd_wf_p = convert_to_cmd_dac_quad_vector(0, x_data_wf.p.wf_v_digital);
-            _sorted_cmd_wf.cmd_wf_n = convert_to_cmd_dac_quad_vector(1, x_data_wf.n.wf_v_digital);
-            _sorted_cmd_wf.trig_x = x_data_wf.p.wf_trig;
-            _sorted_cmd_wf.trig_y.clear();
+            ref_sorted_cmd.t_us = ref_x.p.wf_t_us;
+            ref_sorted_cmd.cmd_wf_p = convert_to_cmd_dac_quad_vector(0, ref_x.p.wf_v_digital);
+            ref_sorted_cmd.cmd_wf_n = convert_to_cmd_dac_quad_vector(1, ref_x.n.wf_v_digital);
+            ref_sorted_cmd.trig_x = ref_x.p.wf_trig;
+            ref_sorted_cmd.trig_y.clear();
         }
         else if (p_is_y_on == true)
         {
-            _sorted_cmd_wf.t_us = y_data_wf.p.wf_t_us;
-            _sorted_cmd_wf.cmd_wf_p = convert_to_cmd_dac_quad_vector(2, y_data_wf.p.wf_v_digital);
-            _sorted_cmd_wf.cmd_wf_n = convert_to_cmd_dac_quad_vector(3, y_data_wf.n.wf_v_digital);
-            _sorted_cmd_wf.trig_x.clear();
-            _sorted_cmd_wf.trig_y = y_data_wf.p.wf_trig;
+            ref_sorted_cmd.t_us = ref_y.p.wf_t_us;
+            ref_sorted_cmd.cmd_wf_p = convert_to_cmd_dac_quad_vector(2, ref_y.p.wf_v_digital);
+            ref_sorted_cmd.cmd_wf_n = convert_to_cmd_dac_quad_vector(3, ref_y.n.wf_v_digital);
+            ref_sorted_cmd.trig_x.clear();
+            ref_sorted_cmd.trig_y = ref_y.p.wf_trig;
         }
         else
         {
-            _sorted_cmd_wf = {};
+            ref_sorted_cmd = {};
         }
     }
 
@@ -294,20 +359,35 @@ namespace hvd190d_pi
     {
         std::cout << "//////////////////// debug_check_sorted_cmd_wf()" << std::endl;
 
+        int k = 0;
         for (auto i : _sorted_cmd_wf.t_us)
-            std::cout << "t_us : " << i << std::endl;
+        {
+            std::cout << "t_us[" << k++ << "] : " << i << std::endl;
+        }
 
+        k = 0;
         for (auto i : _sorted_cmd_wf.cmd_wf_p)
-            std::cout << "cmd_wf_p : " << std::bitset<24>(i) << std::endl;
+        {
+            std::cout << "cmd_wf_p[" << k++ << "] : " << std::bitset<24>(i) << std::endl;
+        }
 
+        k = 0;
         for (auto i : _sorted_cmd_wf.cmd_wf_n)
-            std::cout << "cmd_wf_n : " << std::bitset<24>(i) << std::endl;
+        {
+            std::cout << "cmd_wf_n[" << k++ << "] : " << std::bitset<24>(i) << std::endl;
+        }
 
+        k = 0;
         for (auto i : _sorted_cmd_wf.trig_x)
-            std::cout << "trig_x : " << i << std::endl;
+        {
+            std::cout << "trig_x[" << k++ << "] : " << i << std::endl;
+        }
 
+        k = 0;
         for (auto i : _sorted_cmd_wf.trig_y)
-            std::cout << "trig_y : " << i << std::endl;
+        {
+            std::cout << "trig_y[" << k++ << "] : " << i << std::endl;
+        }
     }
 
 }

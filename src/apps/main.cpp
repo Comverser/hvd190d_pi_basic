@@ -129,54 +129,27 @@ int main(int args_len, char * args[])
         {
             std::cout << "normal trigger mode" << std::endl;
 
-            hvd190d_pi::wf wf_main(16,200,0,4,100000.0,koc::wf_gen::waveform_mode::std_triangle,1,100,100,0,0);
+            hvd190d_pi::wf wf_main;
             wf_main.set_is_x_on(true);
-//            wf_main.set_is_y_on(true);
-            wf_main.set_is_x_trig_on(true);
+            wf_main.set_is_y_on(true);
+//            wf_main.set_is_x_trig_on(true);
 //            wf_main.set_is_y_trig_on(true);
             wf_main.set_is_diff_on(true);
-
-            std::cout << "//////////////////// 0 x only" << std::endl;
+            wf_main.set_param_wf(0, 25600, 100000, 2, 30, 60, 60, 0);
+            wf_main.set_param_wf(1, 25600, 100000, 3, 6000, 60, 60, 0);
             wf_main.run_wf_differential();
-            wf_main.debug_s();
+//            wf_main.debug_s();
 
-            /*
-            std::cout << "//////////////////// 1 param changed wf reduced" << std::endl;
-            wf_main.set_param_wf(0, 0, 0, 0, 0, 100, 10, 0);
-//            wf_main.set_param_wf(1, 4, 100000, 1, 1, 100, 100, 0);
-            wf_main.run_wf_differential();
-            wf_main.debug_s();
-            */
-
-            std::cout << "//////////////////// 2 trig/diff X" << std::endl;
-            wf_main.set_is_x_on(true);
-//            wf_main.set_is_y_on(true);
-            wf_main.set_is_x_trig_on(false);
-//            wf_main.set_is_y_trig_on(false);
-            wf_main.set_is_diff_on(false);
-            wf_main.run_wf_differential();
-            wf_main.debug_s();
-
-            std::cout << "//////////////////// 3 x deleted" << std::endl;
-            wf_main.set_is_x_on(false);
-            wf_main.set_is_y_on(false);
-            wf_main.run_wf_differential();
-            wf_main.debug_s();
-
-            /*
             // drive 
             while (1)
             {
                 hvd190d_pi::t_reset(); // take A
-                for (int i = 0; i < x_p.wf_t_us.size() ; i++ ) // take B, A + B = ~ 1.2 us 
+                for (int i = 0; i < wf_main._sorted_cmd_wf.t_us.size(); i++ ) // take B, A + B = ~ 1.2 us 
                 {
-                    while ( hvd190d_pi::t_lapsed() < x_p.wf_t_us[i] ); // take ~1.4 us
-                    hvd190d_pi::write_trig_y(x_p.wf_trig[i]); // take ~0.22 us
-                    hvd190d_pi::write_spi(1, x_p.wf_v_digital[i]); // take ~3 us
-                    hvd190d_pi::write_spi(2, x_n.wf_v_digital[i]); // take ~3 us
+                    while ( hvd190d_pi::t_lapsed() < wf_main._sorted_cmd_wf.t_us[i] ); // take ~1.4 us
+                    hvd190d_pi::write_spi(wf_main._sorted_cmd_wf.cmd_wf_p[i], wf_main._sorted_cmd_wf.cmd_wf_n[i]);
                 }
             }
-*/
             break;
         }
         case 4:
