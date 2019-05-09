@@ -64,22 +64,31 @@ vector<int> readData(char filename[])
     return data; 
 } 
 
+void drive_hvd190d(hvd190d_pi::wf& p_wf)
+{
+    p_wf.run_wf_differential();
+
+    while (1)
+    {
+        hvd190d_pi::t_reset(); // take A
+        for (int i = 0; i < p_wf._sorted_cmd_wf.t_us.size(); i++ ) // take B, A + B = ~ 1.2 us 
+        {
+            while ( hvd190d_pi::t_lapsed() < p_wf._sorted_cmd_wf.t_us[i] ); // take ~1.4 us
+            hvd190d_pi::write_spi(p_wf._sorted_cmd_wf.cmd_wf_p[i], p_wf._sorted_cmd_wf.cmd_wf_n[i]);
+        }
+    }
+}
 
 int main(int args_len, char * args[]) 
 {
     int user_select;
-    enum csv_col { ch, t_us, dac, trig_x, trig_y };
-    // column 0 : driver output channel
-    // column 1 : time in microseconds
-    // column 2 : 16-bit DAC
-    // column 3 : trigger signal for x
-    // column 4 : trigger signal for y
     
     hvd190d_pi::initialize();
 
     std::cout << "(1) csv trigger mode" << std::endl;
     std::cout << "(2) csv mode" << std::endl;
-    std::cout << "(3) normal mode" << std::endl;
+    std::cout << "(3) normal trigger mode" << std::endl;
+    std::cout << "(4) normal mode" << std::endl;
     std::cout << "Enter number : ";
     std::cin >> user_select;
 
@@ -88,6 +97,12 @@ int main(int args_len, char * args[])
         case 1: 
         {
             std::cout << "csv trigger mode" << std::endl;
+            enum csv_col { ch, t_us, dac, trig_x, trig_y };
+            // column 0 : driver output channel
+            // column 1 : time in microseconds
+            // column 2 : 16-bit DAC
+            // column 3 : trigger signal for x
+            // column 4 : trigger signal for y
             vector<int> csv;
             csv = readData(args[1]); 
             
@@ -110,6 +125,12 @@ int main(int args_len, char * args[])
         {
             std::cout << "csv mode" << std::endl;
             vector<int> csv;
+            enum csv_col { ch, t_us, dac, trig_x, trig_y };
+            // column 0 : driver output channel
+            // column 1 : time in microseconds
+            // column 2 : 16-bit DAC
+            // column 3 : trigger signal for x
+            // column 4 : trigger signal for y
             csv = readData(args[1]); 
             
             hvd190d_pi::t_reset();
@@ -128,33 +149,22 @@ int main(int args_len, char * args[])
         case 3:
         {
             std::cout << "normal trigger mode" << std::endl;
-
-            hvd190d_pi::wf wf_main;
-            wf_main.set_is_x_on(true);
-            wf_main.set_is_y_on(true);
+            std::cout << "Development unfinished!" << std::endl;
 //            wf_main.set_is_x_trig_on(true);
 //            wf_main.set_is_y_trig_on(true);
-            wf_main.set_is_diff_on(true);
-            wf_main.set_param_wf(0, 25600, 100000, 2, 30, 60, 60, 0);
-            wf_main.set_param_wf(1, 25600, 100000, 3, 6000, 60, 60, 0);
-            wf_main.run_wf_differential();
 //            wf_main.debug_s();
-
-            // drive 
-            while (1)
-            {
-                hvd190d_pi::t_reset(); // take A
-                for (int i = 0; i < wf_main._sorted_cmd_wf.t_us.size(); i++ ) // take B, A + B = ~ 1.2 us 
-                {
-                    while ( hvd190d_pi::t_lapsed() < wf_main._sorted_cmd_wf.t_us[i] ); // take ~1.4 us
-                    hvd190d_pi::write_spi(wf_main._sorted_cmd_wf.cmd_wf_p[i], wf_main._sorted_cmd_wf.cmd_wf_n[i]);
-                }
-            }
             break;
         }
         case 4:
         {
             std::cout << "normal mode" << std::endl;
+            hvd190d_pi::wf wf_main;
+            wf_main.set_is_x_on(true);
+            wf_main.set_is_y_on(true);
+            wf_main.set_is_diff_on(true);
+            wf_main.set_param_wf(0, 25600, 100000, 2, 30, 60, 60, 0);
+            wf_main.set_param_wf(1, 25600, 100000, 3, 6000, 60, 60, 0);
+            drive_hvd190d(wf_main);
             break;
         }
         default: 
