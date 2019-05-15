@@ -25,6 +25,10 @@ hvd190d_pi_wf.h
 /home/pi/dev_s/hvd190d_pi_basic/src/apps/hvd190d_pi_wf.h
 hvd190d_pi_driv.h
 /home/pi/dev_s/hvd190d_pi_basic/src/apps/hvd190d_pi_driv.h
+thread
+-
+atomic
+-
 sstream
 -
 fstream

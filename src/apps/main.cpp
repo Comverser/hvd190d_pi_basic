@@ -1,6 +1,9 @@
 #include "hvd190d_pi_wf.h" // "koc_wf_gen.h"
 #include "hvd190d_pi_driv.h" // <wiringPi.h>, <iostream>
 
+#include <thread> // std::thread() 
+#include <atomic> // atomic function
+
 //////////////////// import csv data //////////////////// 
 #include <sstream> 
 #include <fstream> 
@@ -64,11 +67,12 @@ vector<int> readData(char filename[])
     return data; 
 } 
 
-void drive_hvd190d(hvd190d_pi::wf& p_wf)
+void drive_hvd190d(hvd190d_pi::wf& p_wf, std::atomic<bool>& ref_is_running)
 {
+    p_wf.set_is_diff_on(true);
     p_wf.run_wf_differential();
 
-    while (1)
+    while (ref_is_running)
     {
         hvd190d_pi::t_reset(); // take A
         for (int i = 0; i < p_wf._sorted_cmd_wf.t_us.size(); i++ ) // take B, A + B = ~ 1.2 us 
@@ -79,18 +83,25 @@ void drive_hvd190d(hvd190d_pi::wf& p_wf)
     }
 }
 
-int main(int args_len, char * args[]) 
+int menu_hvd190d()
 {
-    int user_select;
-    
-    hvd190d_pi::initialize();
-
+    int m_user_select;
     std::cout << "(1) csv trigger mode" << std::endl;
     std::cout << "(2) csv mode" << std::endl;
     std::cout << "(3) normal trigger mode" << std::endl;
     std::cout << "(4) normal mode" << std::endl;
     std::cout << "Enter number : ";
-    std::cin >> user_select;
+    std::cin >> m_user_select;
+    return m_user_select;
+}
+
+int main(int args_len, char * args[]) 
+{
+    std::atomic<bool> is_running { true };
+    
+    hvd190d_pi::initialize();
+
+    int user_select = menu_hvd190d();
 
     switch(user_select)
     {
@@ -129,8 +140,6 @@ int main(int args_len, char * args[])
             // column 0 : driver output channel
             // column 1 : time in microseconds
             // column 2 : 16-bit DAC
-            // column 3 : trigger signal for x
-            // column 4 : trigger signal for y
             csv = readData(args[1]); 
             
             hvd190d_pi::t_reset();
@@ -161,16 +170,44 @@ int main(int args_len, char * args[])
             hvd190d_pi::wf wf_main;
             wf_main.set_is_x_on(true);
             wf_main.set_is_y_on(true);
-            wf_main.set_is_diff_on(true);
             wf_main.set_param_wf(0, 25600, 100000, 2, 30, 60, 60, 0);
-            wf_main.set_param_wf(1, 25600, 100000, 3, 6000, 60, 60, 0);
-            drive_hvd190d(wf_main);
+            wf_main.set_param_wf(1, 6000*2, 100000, 3, 6000, 60, 60, 0);
+
+            std::thread t(drive_hvd190d, std::ref(wf_main), std::ref(is_running));
+
+            char userinput;
+            std::cout << "press 1 to exit" << std::endl;
+            std::cin >> userinput;
+
+            while (!std::cin)
+            {
+                std::cout << "error \n";
+                std::cout << "press 1 to exit" << std::endl;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cin >> userinput;
+            }
+
+            if (userinput == '1')
+            {
+                std::cout << "user input is 1\n";
+                is_running = false;
+                t.join();
+            }
+            else
+            {
+                std::cout << "user input is not 1\n";
+                is_running = false;
+                t.join();
+            }
             break;
         }
         default: 
             std::cout << "Error" << std::endl;
             break;
     }
+
+    std::cout << "terminating" << std::endl;
 
     hvd190d_pi::terminate();
 	

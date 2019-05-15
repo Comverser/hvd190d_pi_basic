@@ -172,6 +172,9 @@ hvd190d_pi_basic_BINARY_DIR:STATIC=/home/pi/dev_s/hvd190d_pi_basic/build
 hvd190d_pi_basic_SOURCE_DIR:STATIC=/home/pi/dev_s/hvd190d_pi_basic
 
 //Path to a library.
+pthread_LIB:FILEPATH=/usr/lib/arm-linux-gnueabihf/libpthread.so
+
+//Path to a library.
 wiringPi_LIB:FILEPATH=/usr/lib/libwiringPi.so
 
 

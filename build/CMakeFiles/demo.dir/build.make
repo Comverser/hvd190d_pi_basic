@@ -169,6 +169,7 @@ demo: CMakeFiles/demo.dir/src/libs/hvd190d_pi_wf.cpp.o
 demo: CMakeFiles/demo.dir/src/libs/koc_wf_gen.cpp.o
 demo: CMakeFiles/demo.dir/build.make
 demo: /usr/lib/libwiringPi.so
+demo: /usr/lib/arm-linux-gnueabihf/libpthread.so
 demo: CMakeFiles/demo.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pi/dev_s/hvd190d_pi_basic/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable demo"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/demo.dir/link.txt --verbose=$(VERBOSE)
