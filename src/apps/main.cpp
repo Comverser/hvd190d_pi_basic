@@ -3,6 +3,7 @@
 
 #include <thread> // std::thread() 
 #include <atomic> // atomic function
+#include <mutex> // mutex
 
 //////////////////// import csv data //////////////////// 
 #include <sstream> 
@@ -10,6 +11,8 @@
 #include <iterator> 
 #include <vector> 
 #include <string> 
+
+std::mutex mtx;
 
 using namespace std; 
 template <class T> 
@@ -83,6 +86,42 @@ void drive_hvd190d(hvd190d_pi::wf& p_wf, std::atomic<bool>& ref_is_running)
     }
 }
 
+void drive_hvd190d_x(hvd190d_pi::wf& p_wf, std::atomic<bool>& ref_is_running)
+{
+    p_wf.set_is_diff_on(true);
+    p_wf.run_wf_differential();
+
+    while (ref_is_running)
+    {
+        hvd190d_pi::t_reset(); // take A
+        for (int i = 0; i < p_wf._sorted_cmd_wf.t_us.size(); i++ ) // take B, A + B = ~ 1.2 us 
+        {
+            while ( hvd190d_pi::t_lapsed() < p_wf._sorted_cmd_wf.t_us[i] ); // take ~1.4 us
+            mtx.lock();
+            hvd190d_pi::write_spi(p_wf._sorted_cmd_wf.cmd_wf_p[i], p_wf._sorted_cmd_wf.cmd_wf_n[i]);
+            mtx.unlock();
+        }
+    }
+}
+
+void drive_hvd190d_y(hvd190d_pi::wf& p_wf, std::atomic<bool>& ref_is_running)
+{
+    p_wf.set_is_diff_on(true);
+    p_wf.run_wf_differential();
+
+    while (ref_is_running)
+    {
+        hvd190d_pi::t_reset_(); // take A
+        for (int i = 0; i < p_wf._sorted_cmd_wf.t_us.size(); i++ ) // take B, A + B = ~ 1.2 us 
+        {
+            while ( hvd190d_pi::t_lapsed_() < p_wf._sorted_cmd_wf.t_us[i] ); // take ~1.4 us
+            mtx.lock();
+            hvd190d_pi::write_spi(p_wf._sorted_cmd_wf.cmd_wf_p[i], p_wf._sorted_cmd_wf.cmd_wf_n[i]);
+            mtx.unlock();
+        }
+    }
+}
+
 int menu_hvd190d()
 {
     int m_user_select;
@@ -90,6 +129,7 @@ int menu_hvd190d()
     std::cout << "(2) csv mode" << std::endl;
     std::cout << "(3) normal trigger mode" << std::endl;
     std::cout << "(4) normal mode" << std::endl;
+    std::cout << "(5) independent axis mode" << std::endl;
     std::cout << "Enter number : ";
     std::cin >> m_user_select;
     return m_user_select;
@@ -98,6 +138,7 @@ int menu_hvd190d()
 int main(int args_len, char * args[]) 
 {
     std::atomic<bool> is_running { true };
+    std::atomic<bool> is_running_ { true };
     
     hvd190d_pi::initialize();
 
@@ -199,6 +240,55 @@ int main(int args_len, char * args[])
                 std::cout << "user input is not 1\n";
                 is_running = false;
                 t.join();
+            }
+            break;
+        }
+        case 5:
+        {
+            std::cout << "independent axis mode" << std::endl;
+            hvd190d_pi::wf wf_main;
+            wf_main.set_is_x_on(true);
+            wf_main.set_param_wf(0, 25600, 100000, 2, 30, 60, 60, 0);
+
+            hvd190d_pi::wf wf_main_;
+            wf_main_.set_is_y_on(true);
+            wf_main_.set_param_wf(1, 25600, 100000, 2, 30, 60, 60, 0);
+
+            std::thread t_x(drive_hvd190d_x, std::ref(wf_main), std::ref(is_running));
+            std::thread t_y(drive_hvd190d_y, std::ref(wf_main_), std::ref(is_running_));
+
+            char userinput;
+            std::cout << "press 1 to exit" << std::endl;
+            std::cin >> userinput;
+
+            while (!std::cin)
+            {
+                std::cout << "error \n";
+                std::cout << "press 1 to exit" << std::endl;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cin >> userinput;
+            }
+
+            if (userinput == '1')
+            {
+                std::cout << "user input is 1\n";
+                is_running = false;
+                t_x.join();
+            }
+            else if (userinput == '2')
+            {
+                std::cout << "user input is 2\n";
+                is_running_ = false;
+                t_y.join();
+            }
+            else
+            {
+                std::cout << "user input is not 1 and 2\n";
+                is_running = false;
+                is_running_ = false;
+                t_x.join();
+                t_y.join();
             }
             break;
         }

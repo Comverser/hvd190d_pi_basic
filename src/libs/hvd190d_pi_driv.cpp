@@ -45,10 +45,16 @@ namespace hvd190d_pi
     
     // public
     clock_t t_start = 0;
+    clock_t t_start_ = 0;
 
     void t_reset()
     {
         t_start = clock();
+    }
+
+    void t_reset_()
+    {
+        t_start_ = clock();
     }
 
     void write_spi(unsigned long bits)
@@ -97,7 +103,6 @@ namespace hvd190d_pi
         setup_pi();
         setup_dac();
         enable_hv();
-        t_start = clock();
     }
 
     void terminate()
