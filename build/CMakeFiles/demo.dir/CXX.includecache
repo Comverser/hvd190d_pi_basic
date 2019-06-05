@@ -35,8 +35,6 @@ atomic
 -
 mutex
 -
-string.h
--
 sstream
 -
 fstream

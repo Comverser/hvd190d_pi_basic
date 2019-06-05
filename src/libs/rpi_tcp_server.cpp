@@ -37,7 +37,7 @@ namespace rpi
     }
 
     //public
-    char data_tcp[size_buffer];
+    unsigned char data_tcp[size_buffer];
 
     void init_tcp_server() // socket creation
     {
@@ -87,17 +87,17 @@ namespace rpi
 
     void get_data_tcp_server() 
     {
-        char buffer[size_buffer] = {0};
+        unsigned char buffer[size_buffer] = {0};
         int n = 0;
       
-        if ( (n = read(newsockfd, buffer, (sizeof(buffer)/sizeof(buffer[0]))-1) ) < 0 )
+        if ( (n = read(newsockfd, buffer, size_buffer-1) ) < 0 )
         {
             error( const_cast<char *>( "ERROR reading from socket") );
         }
         else
         {
             buffer[n] = '\0'; // c-string
-            strcpy(data_tcp, buffer);
+            memcpy(data_tcp, buffer, size_buffer);
             printf( "got <%s>\n", buffer);
         }
     }
@@ -105,10 +105,10 @@ namespace rpi
     void send_data_tcp_server() 
     {
         int n = 0;
-        char buffer[size_buffer] = {0};
+        unsigned char buffer[size_buffer] = {0};
 
-        sprintf(buffer, "%s", data_tcp );
-        if ( (n = write( newsockfd, buffer, strlen(buffer) ) ) < 0 )
+        memcpy(buffer, data_tcp, size_buffer);
+        if ( (n = write( newsockfd, buffer, strlen((char*)buffer) ) ) < 0 )
         {
             error( const_cast<char *>( "ERROR writing to socket") );
         }
@@ -122,12 +122,6 @@ namespace rpi
     void terminate_tcp_server()
     {
         close( newsockfd );
-    }
-
-    void debug_test()
-    {
-        get_data_tcp_server();
-        send_data_tcp_server();
     }
 
 }

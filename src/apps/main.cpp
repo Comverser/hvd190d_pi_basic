@@ -6,7 +6,7 @@
 #include <atomic> // atomic function
 #include <mutex> // mutex
 
-#include <string.h> // strlen(), strncmp(), etc 
+//#include <string.h> // strncmp(), etc 
 //////////////////// import csv data //////////////////// 
 #include <sstream> 
 #include <fstream> 
@@ -141,10 +141,10 @@ int main(int args_len, char * args[])
 {
     rpi::init_tcp_server();
 
-    while ( strncmp(rpi::data_tcp, "00", 2) ) 
+    while ( rpi::data_tcp[0] != '0' ) 
     {
         rpi::run_tcp_server();
-        while ( strncmp(rpi::data_tcp, "0", 1) ) 
+        while ( rpi::data_tcp[0] != '0' && rpi::data_tcp[0] != '1' ) 
         {
             rpi::get_data_tcp_server();
             rpi::send_data_tcp_server();
