@@ -231,6 +231,33 @@ src/libs/koc_wf_gen.cpp.s:
 	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/koc_wf_gen.cpp.s
 .PHONY : src/libs/koc_wf_gen.cpp.s
 
+src/libs/rpi_tcp_server.o: src/libs/rpi_tcp_server.cpp.o
+
+.PHONY : src/libs/rpi_tcp_server.o
+
+# target to build an object file
+src/libs/rpi_tcp_server.cpp.o:
+	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/rpi_tcp_server.cpp.o
+.PHONY : src/libs/rpi_tcp_server.cpp.o
+
+src/libs/rpi_tcp_server.i: src/libs/rpi_tcp_server.cpp.i
+
+.PHONY : src/libs/rpi_tcp_server.i
+
+# target to preprocess a source file
+src/libs/rpi_tcp_server.cpp.i:
+	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/rpi_tcp_server.cpp.i
+.PHONY : src/libs/rpi_tcp_server.cpp.i
+
+src/libs/rpi_tcp_server.s: src/libs/rpi_tcp_server.cpp.s
+
+.PHONY : src/libs/rpi_tcp_server.s
+
+# target to generate assembly for a file
+src/libs/rpi_tcp_server.cpp.s:
+	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/rpi_tcp_server.cpp.s
+.PHONY : src/libs/rpi_tcp_server.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -252,6 +279,9 @@ help:
 	@echo "... src/libs/koc_wf_gen.o"
 	@echo "... src/libs/koc_wf_gen.i"
 	@echo "... src/libs/koc_wf_gen.s"
+	@echo "... src/libs/rpi_tcp_server.o"
+	@echo "... src/libs/rpi_tcp_server.i"
+	@echo "... src/libs/rpi_tcp_server.s"
 .PHONY : help
 
 

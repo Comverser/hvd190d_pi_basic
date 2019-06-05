@@ -3,6 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/demo.dir/src/libs/hvd190d_pi_driv.cpp.o"
   "CMakeFiles/demo.dir/src/libs/hvd190d_pi_wf.cpp.o"
   "CMakeFiles/demo.dir/src/libs/koc_wf_gen.cpp.o"
+  "CMakeFiles/demo.dir/src/libs/rpi_tcp_server.cpp.o"
   "demo.pdb"
   "demo"
 )

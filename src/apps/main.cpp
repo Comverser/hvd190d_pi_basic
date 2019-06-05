@@ -1,10 +1,12 @@
 #include "hvd190d_pi_wf.h" // "koc_wf_gen.h"
 #include "hvd190d_pi_driv.h" // <wiringPi.h>, <iostream>
+#include "rpi_tcp_server.h"
 
 #include <thread> // std::thread() 
 #include <atomic> // atomic function
 #include <mutex> // mutex
 
+#include <string.h> // strlen(), strncmp(), etc 
 //////////////////// import csv data //////////////////// 
 #include <sstream> 
 #include <fstream> 
@@ -137,6 +139,19 @@ int menu_hvd190d()
 
 int main(int args_len, char * args[]) 
 {
+    rpi::init_tcp_server();
+
+    while ( strncmp(rpi::data_tcp, "00", 2) ) 
+    {
+        rpi::run_tcp_server();
+        while ( strncmp(rpi::data_tcp, "0", 1) ) 
+        {
+            rpi::get_data_tcp_server();
+            rpi::send_data_tcp_server();
+        }
+        rpi::terminate_tcp_server();
+    }
+
     std::atomic<bool> is_running { true };
     std::atomic<bool> is_running_ { true };
     
