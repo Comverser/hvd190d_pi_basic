@@ -74,7 +74,6 @@ vector<int> readData(char filename[])
 
 void drive_hvd190d(hvd190d_pi::wf& p_wf, std::atomic<bool>& ref_is_running)
 {
-    p_wf.set_is_diff_on(true);
     p_wf.run_wf_differential();
 
     while (ref_is_running)
@@ -140,18 +139,56 @@ int menu_hvd190d()
 int main(int args_len, char * args[]) 
 {
     rpi::init_tcp_server();
+    std::cout << "HV on" << std::endl;
+    hvd190d_pi::initialize();
+    hvd190d_pi::wf wf_main;
+    wf_main.set_is_diff_on(true);
+    wf_main.set_is_x_on(true);
+    wf_main.set_is_y_on(true);
+    wf_main.set_param_wf(0, 25600, 100000, 1, 0.2, 60, 60, 0);
+    wf_main.set_param_wf(1, 500*2, 100000, 3, 500, 60, 60, 0);
+    std::atomic<bool> is_running { true }; 
 
-    while ( rpi::data_tcp[0] != '0' ) 
+    while ( rpi::data_tcp[0] != '4' ) 
     {
         rpi::run_tcp_server();
-        while ( rpi::data_tcp[0] != '0' && rpi::data_tcp[0] != '1' ) 
+
+        while ( rpi::data_tcp[0] != '3' && rpi::data_tcp[0] != '4' ) 
         {
             rpi::get_data_tcp_server();
-            rpi::send_data_tcp_server();
+            if (rpi::data_tcp[0] >= '0' && rpi::data_tcp[0] <= '4')
+            {
+                rpi::send_data_tcp_server((unsigned char *)"OK");
+                if (rpi::data_tcp[0] == '0') // stop 
+                {
+                    std::cout << "Stop" << std::endl;
+                    is_running = false;
+                }
+                else if (rpi::data_tcp[0] == '1') // run
+                {
+                    std::cout << "Start" << std::endl;
+                    std::thread t(drive_hvd190d, std::ref(wf_main), std::ref(is_running));
+                    t.detach();
+                }
+                else if (rpi::data_tcp[0] == '2') // setting
+                {
+                    std::cout << "Setting" << std::endl;
+                }
+            }
+            else
+            {
+                rpi::send_data_tcp_server((unsigned char *)"INVALID");
+            }
         }
+        std::cout << "Terminating" << std::endl;
+        hvd190d_pi::terminate();
+
         rpi::terminate_tcp_server();
     }
 
+    return 0;
+
+    /*
     std::atomic<bool> is_running { true };
     std::atomic<bool> is_running_ { true };
     
@@ -315,6 +352,7 @@ int main(int args_len, char * args[])
     std::cout << "terminating" << std::endl;
 
     hvd190d_pi::terminate();
-	
+
     return 0; 
+    */
 }

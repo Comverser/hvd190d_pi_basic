@@ -102,12 +102,12 @@ namespace rpi
         }
     }
 
-    void send_data_tcp_server() 
+    void send_data_tcp_server(unsigned char p_data_tcp[]) 
     {
         int n = 0;
         unsigned char buffer[size_buffer] = {0};
 
-        memcpy(buffer, data_tcp, size_buffer);
+        memcpy(buffer, p_data_tcp, size_buffer);
         if ( (n = write( newsockfd, buffer, strlen((char*)buffer) ) ) < 0 )
         {
             error( const_cast<char *>( "ERROR writing to socket") );
