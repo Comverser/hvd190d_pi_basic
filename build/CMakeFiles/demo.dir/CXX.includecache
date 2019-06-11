@@ -31,19 +31,11 @@ rpi_tcp_server.h
 /home/pi/dev_s/hvd190d_pi_basic/src/apps/rpi_tcp_server.h
 thread
 -
+chrono
+-
 atomic
 -
-mutex
--
-sstream
--
-fstream
--
-iterator
--
 vector
--
-string
 -
 
 /home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_driv.cpp

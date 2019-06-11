@@ -16,7 +16,7 @@ The server assumes the client will send positive integers, which it sends back m
 
 namespace rpi
 {
-    constexpr unsigned int size_buffer = 7 + 1; // data + null
+    constexpr unsigned int size_buffer = 1023 + 1; // data + null
     extern unsigned char data_tcp[size_buffer];
 
     void init_tcp_server();

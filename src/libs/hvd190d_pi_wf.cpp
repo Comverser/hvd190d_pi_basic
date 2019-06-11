@@ -195,6 +195,13 @@ namespace hvd190d_pi
 
     void wf::sort_wf_differential_xy(sorted_cmd_wf& ref_sorted_cmd, data_wf_digital_pn& ref_x, data_wf_digital_pn& ref_y)
     {
+        ref_sorted_cmd.t_us.clear();
+        ref_sorted_cmd.t_us.shrink_to_fit();
+        ref_sorted_cmd.cmd_wf_p.clear();
+        ref_sorted_cmd.cmd_wf_p.shrink_to_fit();
+        ref_sorted_cmd.cmd_wf_n.clear();
+        ref_sorted_cmd.cmd_wf_n.shrink_to_fit();
+
         int size_wf_t_p = ref_x.p.wf_t_us.size() + ref_y.p.wf_t_us.size(); 
 
 //        ref_sorted_cmd.trig_x.reserve(size_wf_t_p);
@@ -267,6 +274,7 @@ namespace hvd190d_pi
         if ( (p_is_x_on == true) && (p_is_y_on == true) )
         {
             sort_wf_differential_xy(ref_sorted_cmd, ref_x, ref_y);
+
         }
         else if (p_is_x_on == true)
         {
