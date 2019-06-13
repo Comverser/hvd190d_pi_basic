@@ -35,7 +35,7 @@ chrono
 -
 atomic
 -
-vector
+sstream
 -
 
 /home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_driv.cpp

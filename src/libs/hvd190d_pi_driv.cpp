@@ -1,4 +1,4 @@
-#include "hvd190d_pi_driv.h" // <wiringPi.h>, <iostream>
+#include "hvd190d_pi_driv.h" // <wiringPi.h>; <iostream>
 
 namespace hvd190d_pi
 {
