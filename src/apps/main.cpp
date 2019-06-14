@@ -124,6 +124,8 @@ int main(int args_len, char * args[])
                         wf_main.set_param_wf(0, fs[0], 100000, wf[0], freq[0], amp[0], offset[0], phase[0], width[0]);
                         wf_main.set_param_wf(1, fs[0], 100000, wf[1], freq[1], amp[1], offset[1], phase[1], width[1]);
                         wf_main.run_wf_differential();
+                        // If the drive thread is running, the code below means reading and writing at the same time and
+                        // causes undefined behavior.
                         t_us = wf_main._sorted_cmd_wf.t_us;
                         cmd_wf_p = wf_main._sorted_cmd_wf.cmd_wf_p;
                         cmd_wf_n = wf_main._sorted_cmd_wf.cmd_wf_n;
@@ -152,7 +154,10 @@ int main(int args_len, char * args[])
     // terminate therad
     is_running = false;
     is_on_thread_driv= false;
-    t_driv.join();
+    if (t_driv.joinable())
+    {
+        t_driv.join();
+    }
 
     // end driver
     std::cout << "Terminating" << std::endl;
