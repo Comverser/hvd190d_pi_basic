@@ -37,6 +37,8 @@ atomic
 -
 sstream
 -
+fstream
+-
 
 /home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_driv.cpp
 hvd190d_pi_driv.h

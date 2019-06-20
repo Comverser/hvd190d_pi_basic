@@ -8,7 +8,8 @@ cmake ..
 
 make
 
-./demo ./../src/apps/wf_trig.csv
+./demo ./wf4.csv
+#./demo ./../src/apps/wf_trig.csv
 #./demo ./../src/apps/wf.csv
 #./demo ./../src/apps/wf_max_speed_trig.csv
 #./demo ./../src/apps/wf_max_speed.csv
