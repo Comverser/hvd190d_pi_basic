@@ -17,7 +17,7 @@ struct buffer
     std::vector<unsigned long> cmd_wf_n;
 };
 
-buffer wf1, wf2, wf3;
+buffer wf1, wf2, wf3, wf4, wf_buffer;
 
 void driv(buffer wf)
 {
@@ -113,47 +113,69 @@ int main(int args_len, char * args[]) // release mode!
     wf_main.set_is_x_on(true);
     wf_main.set_is_y_on(true);
     
+    // mode buffer
+	wf_main.set_param_wf(0, 10, 100000, 0, 100, 0, 60, 0, 0); // y-axis
+	wf_main.set_param_wf(1, 10, 100000, 0, 100, 0, 60, 0, 0); // x-axis
+	wf_main.run_wf_differential();
+	wf_buffer.t_us = wf_main._sorted_cmd_wf.t_us;
+	wf_buffer.cmd_wf_p = wf_main._sorted_cmd_wf.cmd_wf_p;
+	wf_buffer.cmd_wf_n = wf_main._sorted_cmd_wf.cmd_wf_n;
+
     // mode 1
-	wf_main.set_param_wf(0, 25400, 100000, 2, 0.3, -60, 60, 0, 0); // y-axis
-	wf_main.set_param_wf(1, 25400, 100000, 0, 60, 60, 60, 0, 0); // x-axis
+	wf_main.set_param_wf(0, 25400, 100000, 1, 0.3, -60, 60, 0, 0); // y-axis
+	wf_main.set_param_wf(1, 25400, 100000, 0, 60.1, 60, 60, 0, 0); // x-axis
 	wf_main.run_wf_differential();
 	wf1.t_us = wf_main._sorted_cmd_wf.t_us;
 	wf1.cmd_wf_p = wf_main._sorted_cmd_wf.cmd_wf_p;
 	wf1.cmd_wf_n = wf_main._sorted_cmd_wf.cmd_wf_n;
 
     // mode 2
-	wf_main.set_param_wf(0, 25400, 100000, 0, 60, 60, 60, 0, 0); // y-axis
-	wf_main.set_param_wf(1, 25400, 100000, 0, 60.1, 60, 60, 0, 0); // x-axis
+	wf_main.set_param_wf(0, 25400, 100000, 0, 30.3, 60, 60, 0, 0); // y-axis
+	wf_main.set_param_wf(1, 25400, 100000, 0, 31, 60, 60, 0, 0); // x-axis
 	wf_main.run_wf_differential();
 	wf2.t_us = wf_main._sorted_cmd_wf.t_us;
 	wf2.cmd_wf_p = wf_main._sorted_cmd_wf.cmd_wf_p;
 	wf2.cmd_wf_n = wf_main._sorted_cmd_wf.cmd_wf_n;
 
     // mode 3
-	wf_main.set_param_wf(0, 25400, 100000, 1, 0.4, 60, 60, 0, 0); // y-axis
-	wf_main.set_param_wf(1, 25400, 100000, 1, 0.1, 60, 60, 0, 0); // x-axis
+	wf_main.set_param_wf(0, 25400, 100000, 1, 10.1, 60, 60, 0, 0); // y-axis
+	wf_main.set_param_wf(1, 25400, 100000, 0, 200, 50, 60, 0, 0); // x-axis
 	wf_main.run_wf_differential();
 	wf3.t_us = wf_main._sorted_cmd_wf.t_us;
 	wf3.cmd_wf_p = wf_main._sorted_cmd_wf.cmd_wf_p;
 	wf3.cmd_wf_n = wf_main._sorted_cmd_wf.cmd_wf_n;
 
     // mode 4
-    std::vector<int> wf4 = readData(args[1]); 
+	wf_main.set_param_wf(0, 25400, 100000, 1, 0.4, 60, 60, 0, 0); // y-axis
+	wf_main.set_param_wf(1, 25400, 100000, 1, 0.1, 60, 60, 0, 0); // x-axis
+	wf_main.run_wf_differential();
+	wf4.t_us = wf_main._sorted_cmd_wf.t_us;
+	wf4.cmd_wf_p = wf_main._sorted_cmd_wf.cmd_wf_p;
+	wf4.cmd_wf_n = wf_main._sorted_cmd_wf.cmd_wf_n;
 
+    // mode arb
+    std::vector<int> wf_arb = readData(args[1]); 
 
+        /*
+        */
     //////////////////// drive 
     while(1)
     {
-        driv(wf1);
-        driv(wf1);
+        driv(wf_buffer);
+        driv(wf_buffer);
         driv(wf1);
 
+        driv(wf_buffer);
         driv(wf2);
 
+        driv(wf_buffer);
         driv(wf3);
 
-        driv_arb(wf4);
-        driv_arb(wf4);
+        driv(wf_buffer);
+        driv(wf4);
+
+        driv(wf_buffer);
+        driv_arb(wf_arb);
     }
 
     // end driver
