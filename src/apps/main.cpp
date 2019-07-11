@@ -17,7 +17,7 @@ struct buffer
     std::vector<unsigned long> cmd_wf_n;
 };
 
-buffer wf1, wf2, wf3, wf4, wf_buffer;
+buffer wf1, wf2, wf3, wf4, wf_buffer, wf_test;
 
 void driv(buffer wf)
 {
@@ -130,8 +130,8 @@ int main(int args_len, char * args[]) // release mode!
 	wf1.cmd_wf_n = wf_main._sorted_cmd_wf.cmd_wf_n;
 
     // mode 2
-	wf_main.set_param_wf(0, 25400, 100000, 0, 30.3, 60, 60, 0, 0); // y-axis
-	wf_main.set_param_wf(1, 25400, 100000, 0, 31, 60, 60, 0, 0); // x-axis
+	wf_main.set_param_wf(0, 25400, 100000, 0, 30.1, 60, 60, 0, 0); // y-axis
+	wf_main.set_param_wf(1, 25400, 100000, 0, 33, 60, 60, 0, 0); // x-axis
 	wf_main.run_wf_differential();
 	wf2.t_us = wf_main._sorted_cmd_wf.t_us;
 	wf2.cmd_wf_p = wf_main._sorted_cmd_wf.cmd_wf_p;
@@ -157,6 +157,15 @@ int main(int args_len, char * args[]) // release mode!
     std::vector<int> wf_arb = readData(args[1]); 
 
         /*
+    // mode test
+	wf_main.set_param_wf(0, 25400, 100000, 1, 0.9, 60, 60, 0, 0); // y-axis
+	wf_main.set_param_wf(1, 25400, 100000, 0, 0.8, 60, 60, 0, 0); // x-axis
+	wf_main.run_wf_differential();
+	wf_test.t_us = wf_main._sorted_cmd_wf.t_us;
+	wf_test.cmd_wf_p = wf_main._sorted_cmd_wf.cmd_wf_p;
+	wf_test.cmd_wf_n = wf_main._sorted_cmd_wf.cmd_wf_n;
+    driv(wf_test);
+        
         */
     //////////////////// drive 
     while(1)
