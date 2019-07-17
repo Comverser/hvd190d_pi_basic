@@ -10,9 +10,9 @@ namespace hvd190d_pi
 
     static void write_bit(int bit)
     { 
-        ::gpio_high(sclk);
-        ::gpio_write(din, bit);
-        ::gpio_low(sclk);
+        gpio_high(sclk);
+        gpio_write(din, bit);
+        gpio_low(sclk);
     }
 
     static void setup_pi()
