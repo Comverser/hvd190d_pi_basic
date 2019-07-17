@@ -12,11 +12,11 @@ file(GLOB SOURCES_LIBS "src/libs/*.cpp")
 
 add_executable(demo ${SOURCES_APPS} ${SOURCES_LIBS})
 
-find_library(wiringPi_LIB wiringPi)
+#find_library(wiringPi_LIB wiringPi)
 find_library(pthread_LIB pthread)
 
-target_link_libraries(demo ${wiringPi_LIB} ${pthread_LIB})
-#target_link_libraries(demo ${pthread_LIB})
+#target_link_libraries(demo ${wiringPi_LIB} ${pthread_LIB})
+target_link_libraries(demo ${pthread_LIB})
 
 #include_directories(${PROJECT_SOURCE_DIR}/src/apps)
 #set (source_dir_apps "${PROJECT_SOURCE_DIR}/src/apps/")

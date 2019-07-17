@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/pi/dev_s/hvd190d_pi_basic/src/libs/rpi_reg_access.c
+rpi_reg_access.h
+/home/pi/dev_s/hvd190d_pi_basic/src/libs/rpi_reg_access.h
+stdio.h
+-
+stdlib.h
+-
+fcntl.h
+-
+sys/mman.h
+-
+unistd.h
+-
+
+/home/pi/dev_s/hvd190d_pi_basic/src/libs/rpi_reg_access.h
+

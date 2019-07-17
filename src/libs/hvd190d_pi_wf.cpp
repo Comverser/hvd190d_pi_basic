@@ -1,5 +1,4 @@
 #include "hvd190d_pi_wf.h" // "koc_wf_gen.h"
-//#include "hvd190d_pi_driv.h" // <wiringPi.h>; <iostream>
 #include <cmath>
 #include <iostream> // for debug
 #include <bitset> // for debug : use of bitset function

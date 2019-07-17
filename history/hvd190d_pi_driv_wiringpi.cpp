@@ -1,29 +1,28 @@
-#include "hvd190d_pi_driv.h" // <iostream>
-#include "rpi_reg_access.h"
+#include "hvd190d_pi_driv_wiringpi.h" // <wiringPi.h>; <iostream>
 
 namespace hvd190d_pi
 {
     // private
-    enum pin_spi { din = 10, sclk = 11, sync = 8 };
-    enum pin_trig { x = 20, y = 21 };
-    enum pin_misc { hv = 16 };
+    enum pin_spi { din = 19, sclk = 23, sync = 24 };
+    enum pin_trig { x = 38, y = 40 };
+    enum pin_misc { hv = 36 };
 
     static void write_bit(int bit)
     { 
-        ::gpio_high(sclk);
-        ::gpio_write(din, bit);
-        ::gpio_low(sclk);
+        digitalWrite(sclk, 1); 
+        digitalWrite(din, bit);
+        digitalWrite(sclk, 0); 
     }
 
     static void setup_pi()
     {
-        gpio_init();
-        gpio_mode_out(din);
-        gpio_mode_out(sclk);
-        gpio_mode_out(sync);
-        gpio_mode_out(x);
-        gpio_mode_out(y);
-        gpio_mode_out(hv);
+        wiringPiSetupPhys(); 
+        pinMode(din, OUTPUT); 
+        pinMode(sclk, OUTPUT); 
+        pinMode(sync, OUTPUT);
+        pinMode(x, OUTPUT);
+        pinMode(y, OUTPUT);
+        pinMode(hv, OUTPUT);
     }
 
     static void setup_dac()
@@ -36,12 +35,12 @@ namespace hvd190d_pi
 
     static void enable_hv()
     {
-        gpio_high(hv);
+        digitalWrite(hv, 1);
     }
 
     static void disable_hv()
     {
-        gpio_low(hv);
+        digitalWrite(hv, 0);
     }
     
     // public
@@ -60,28 +59,22 @@ namespace hvd190d_pi
 
     void write_spi(unsigned long bits)
     { 
-        gpio_low(sync);
+        digitalWrite(sync, 0); 
         for (int i = 0; i < 24; i++) 
-        {
             write_bit((bits >> (23 - i)) & 0x01); 
-        }
-        gpio_high(sync);
+        digitalWrite(sync, 1); 
     }
 
     void write_spi(unsigned long bits_p, unsigned long bits_n)
     { 
-        gpio_low(sync);
+        digitalWrite(sync, 0); 
         for (int i = 0; i < 24; i++) 
-        {
             write_bit((bits_p >> (23 - i)) & 0x01); 
-        }
-        gpio_high(sync);
-        gpio_low(sync);
+        digitalWrite(sync, 1); 
+        digitalWrite(sync, 0); 
         for (int i = 0; i < 24; i++) 
-        {
             write_bit((bits_n >> (23 - i)) & 0x01); 
-        }
-        gpio_high(sync);
+        digitalWrite(sync, 1); 
     }
 
     void write_spi(int ch, unsigned long v_digital)
@@ -97,12 +90,12 @@ namespace hvd190d_pi
 
     void write_trig_x(int signal)
     {
-        gpio_write(x, signal);
+        digitalWrite(x, signal); 
     }
 
     void write_trig_y(int signal)
     {
-        gpio_write(y, signal);
+        digitalWrite(y, signal);
     }
 
     void initialize()

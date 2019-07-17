@@ -1,6 +1,7 @@
-#ifndef HVD190D_PI_DRIV_H
-#define HVD190D_PI_DRIV_H
+#ifndef HVD190D_PI_DRIV_WIRINGPI_H
+#define HVD190D_PI_DRIV_WIRINGPI_H
 
+#include <wiringPi.h>
 #include <iostream> // for the inline functions
 
 namespace hvd190d_pi

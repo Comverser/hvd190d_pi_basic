@@ -10,6 +10,7 @@ CMakeFiles/demo.dir/src/apps/main.cpp.o
 CMakeFiles/demo.dir/src/libs/hvd190d_pi_driv.cpp.o
  /home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_driv.cpp
  /home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_driv.h
+ /home/pi/dev_s/hvd190d_pi_basic/src/libs/rpi_reg_access.h
 CMakeFiles/demo.dir/src/libs/hvd190d_pi_wf.cpp.o
  /home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_wf.cpp
  /home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_wf.h
@@ -17,6 +18,9 @@ CMakeFiles/demo.dir/src/libs/hvd190d_pi_wf.cpp.o
 CMakeFiles/demo.dir/src/libs/koc_wf_gen.cpp.o
  /home/pi/dev_s/hvd190d_pi_basic/src/libs/koc_wf_gen.cpp
  /home/pi/dev_s/hvd190d_pi_basic/src/libs/koc_wf_gen.h
+CMakeFiles/demo.dir/src/libs/rpi_reg_access.cpp.o
+ /home/pi/dev_s/hvd190d_pi_basic/src/libs/rpi_reg_access.cpp
+ /home/pi/dev_s/hvd190d_pi_basic/src/libs/rpi_reg_access.h
 CMakeFiles/demo.dir/src/libs/rpi_tcp_server.cpp.o
  /home/pi/dev_s/hvd190d_pi_basic/src/libs/rpi_tcp_server.cpp
  /home/pi/dev_s/hvd190d_pi_basic/src/libs/rpi_tcp_server.h

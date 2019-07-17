@@ -113,8 +113,6 @@ int main(int args_len, char * args[]) // release mode!
     wf_main.set_is_x_on(true);
     wf_main.set_is_y_on(true);
     
-    /*
-     
     // mode buffer
 	wf_main.set_param_wf(0, 10, 100000, 0, 100, 0, 60, 0, 0); // y-axis
 	wf_main.set_param_wf(1, 10, 100000, 0, 100, 0, 60, 0, 0); // x-axis
@@ -157,23 +155,18 @@ int main(int args_len, char * args[]) // release mode!
 
     // mode arb
     std::vector<int> wf_arb = readData(args[1]); 
-    */
 
-    /*
-    */
+        /*
     // mode test
-	wf_main.set_param_wf(0, 25400, 100000, 3, 10000, 60, 60, 0, 0); // y-axis
-	wf_main.set_param_wf(1, 25400, 100000, 3, 10000, 60, 60, 0, 0); // x-axis
+	wf_main.set_param_wf(0, 25400, 100000, 1, 0.9, 60, 60, 0, 0); // y-axis
+	wf_main.set_param_wf(1, 25400, 100000, 0, 0.8, 60, 60, 0, 0); // x-axis
 	wf_main.run_wf_differential();
 	wf_test.t_us = wf_main._sorted_cmd_wf.t_us;
 	wf_test.cmd_wf_p = wf_main._sorted_cmd_wf.cmd_wf_p;
 	wf_test.cmd_wf_n = wf_main._sorted_cmd_wf.cmd_wf_n;
-    while (1)
-    {
-        driv(wf_test);
-    }
+    driv(wf_test);
         
-        /*
+        */
     //////////////////// drive 
     while(1)
     {
@@ -193,7 +186,6 @@ int main(int args_len, char * args[]) // release mode!
         driv(wf_buffer);
         driv_arb(wf_arb);
     }
-        */
 
     // end driver
     std::cout << "Terminating" << std::endl;

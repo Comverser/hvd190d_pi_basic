@@ -231,6 +231,33 @@ src/libs/koc_wf_gen.cpp.s:
 	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/koc_wf_gen.cpp.s
 .PHONY : src/libs/koc_wf_gen.cpp.s
 
+src/libs/rpi_reg_access.o: src/libs/rpi_reg_access.cpp.o
+
+.PHONY : src/libs/rpi_reg_access.o
+
+# target to build an object file
+src/libs/rpi_reg_access.cpp.o:
+	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/rpi_reg_access.cpp.o
+.PHONY : src/libs/rpi_reg_access.cpp.o
+
+src/libs/rpi_reg_access.i: src/libs/rpi_reg_access.cpp.i
+
+.PHONY : src/libs/rpi_reg_access.i
+
+# target to preprocess a source file
+src/libs/rpi_reg_access.cpp.i:
+	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/rpi_reg_access.cpp.i
+.PHONY : src/libs/rpi_reg_access.cpp.i
+
+src/libs/rpi_reg_access.s: src/libs/rpi_reg_access.cpp.s
+
+.PHONY : src/libs/rpi_reg_access.s
+
+# target to generate assembly for a file
+src/libs/rpi_reg_access.cpp.s:
+	$(MAKE) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/libs/rpi_reg_access.cpp.s
+.PHONY : src/libs/rpi_reg_access.cpp.s
+
 src/libs/rpi_tcp_server.o: src/libs/rpi_tcp_server.cpp.o
 
 .PHONY : src/libs/rpi_tcp_server.o
@@ -279,6 +306,9 @@ help:
 	@echo "... src/libs/koc_wf_gen.o"
 	@echo "... src/libs/koc_wf_gen.i"
 	@echo "... src/libs/koc_wf_gen.s"
+	@echo "... src/libs/rpi_reg_access.o"
+	@echo "... src/libs/rpi_reg_access.i"
+	@echo "... src/libs/rpi_reg_access.s"
 	@echo "... src/libs/rpi_tcp_server.o"
 	@echo "... src/libs/rpi_tcp_server.i"
 	@echo "... src/libs/rpi_tcp_server.s"

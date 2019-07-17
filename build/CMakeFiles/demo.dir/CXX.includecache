@@ -7,8 +7,6 @@
 #IncludeRegexTransform: 
 
 ../src/libs/hvd190d_pi_driv.h
-wiringPi.h
--
 iostream
 -
 
@@ -43,10 +41,10 @@ fstream
 /home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_driv.cpp
 hvd190d_pi_driv.h
 /home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_driv.h
+rpi_reg_access.h
+/home/pi/dev_s/hvd190d_pi_basic/src/libs/rpi_reg_access.h
 
 /home/pi/dev_s/hvd190d_pi_basic/src/libs/hvd190d_pi_driv.h
-wiringPi.h
--
 iostream
 -
 
@@ -79,6 +77,22 @@ iomanip
 /home/pi/dev_s/hvd190d_pi_basic/src/libs/koc_wf_gen.h
 vector
 -
+
+/home/pi/dev_s/hvd190d_pi_basic/src/libs/rpi_reg_access.cpp
+rpi_reg_access.h
+/home/pi/dev_s/hvd190d_pi_basic/src/libs/rpi_reg_access.h
+stdio.h
+-
+stdlib.h
+-
+fcntl.h
+-
+sys/mman.h
+-
+unistd.h
+-
+
+/home/pi/dev_s/hvd190d_pi_basic/src/libs/rpi_reg_access.h
 
 /home/pi/dev_s/hvd190d_pi_basic/src/libs/rpi_tcp_server.cpp
 rpi_tcp_server.h
