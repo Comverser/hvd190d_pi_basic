@@ -10,12 +10,13 @@ namespace hvd190d_pi
 
     inline int t_lapsed()
     {
-        return (((clock() - t_start) / (float)CLOCKS_PER_SEC) * 1000000);
+        return clock() - t_start;
+//        return (((clock() - t_start) / (float)CLOCKS_PER_SEC) * 1000000);
     }
 
     inline int t_lapsed_()
     {
-        return (((clock() - t_start_) / (float)CLOCKS_PER_SEC) * 1000000);
+        return clock() - t_start_;
     }
 
     inline unsigned long convert_to_spi(int ch, unsigned long v_digital)

@@ -75,6 +75,7 @@ namespace koc
         double fs; 
         int fs_per_period;
         double freq_max_eight_bits;
+        int loop_delay;
         std::vector<double> wf_t;
         std::vector<unsigned long> wf_t_us;
         std::vector<double> wf_v;
