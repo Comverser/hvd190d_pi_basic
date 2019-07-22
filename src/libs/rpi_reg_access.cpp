@@ -29,7 +29,7 @@ void *gpio_map;
 volatile unsigned *gpio;
 
 // GPIO setup macros. Always use INP_GPIO(x) before using OUT_GPIO(x) or SET_GPIO_ALT(x,y)
-//#define INP_GPIO(g) *(gpio+((g)/10)) &= ~(7<<(((g)%10)*3))
+#define INP_GPIO(g) *(gpio+((g)/10)) &= ~(7<<(((g)%10)*3))
 #define OUT_GPIO(g) *(gpio+((g)/10)) |=  (1<<(((g)%10)*3))
 //#define SET_GPIO_ALT(g,a) *(gpio+(((g)/10))) |= (((a)<=3?(a)+4:(a)==4?3:2)<<(((g)%10)*3))
 
@@ -109,7 +109,7 @@ void gpio_init()
 
 void gpio_mode_out(int g)
 {
-//    INP_GPIO(g); // must use INP_GPIO before we can use OUT_GPIO
+    INP_GPIO(g); // must use INP_GPIO before so that we can use OUT_GPIO
     OUT_GPIO(g);
 }
 
