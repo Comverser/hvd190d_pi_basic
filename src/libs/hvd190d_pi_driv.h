@@ -21,7 +21,8 @@ namespace hvd190d_pi
 
     inline unsigned long convert_to_spi(int ch, unsigned long v_digital)
     {
-        return 0x100000 | ( ( (0x000000 | (ch-1)) << 16) | v_digital); 
+//        return 0x100000 | ( ( (0x000000 | (ch-1)) << 16) | v_digital); // software LDAC 
+        return 0x180000 | ( ( (0x000000 | (ch)) << 16) | v_digital); 
     }
 
     void t_reset();

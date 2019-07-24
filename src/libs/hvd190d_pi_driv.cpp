@@ -28,10 +28,13 @@ namespace hvd190d_pi
 
     static void setup_dac()
     {
-        write_spi(0x280001);
-        write_spi(0x380000);
-        write_spi(0x20000F);
-        write_spi(0x300000);
+        write_spi(0x280001); // full reset
+        write_spi(0x20000F); // power-down mode: all DAC channels power-up
+    }
+
+    static void power_down_dac()
+    {
+        write_spi(0x20001F); // power-down mode: 1 kohm to GND
     }
 
     static void enable_hv()
@@ -115,6 +118,7 @@ namespace hvd190d_pi
     void terminate()
     {
         disable_hv();
+//        power_down_dac();
     }
 
 }

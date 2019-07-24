@@ -66,7 +66,7 @@ namespace hvd190d_pi
 
         inline unsigned long convert_to_cmd_dac_quad_datum(int ch, unsigned long v_digital) const
         {
-            return 0x100000 | ( ( (0x000000 | (ch)) << 16) | v_digital); // channel number starts from zero
+            return 0x180000 | ( ( (0x000000 | (ch)) << 16) | v_digital); // channel number starts from zero
         }
 
         std::vector<unsigned long> convert_to_cmd_dac_quad_vector(int ch, std::vector<unsigned long> v_digital);
