@@ -185,9 +185,7 @@ int main(int args_len, char * args[]) // release mode!
 	wf4.t_us = wf_main._sorted_cmd_wf.t_us;
 	wf4.cmd_wf_p = wf_main._sorted_cmd_wf.cmd_wf_p;
 	wf4.cmd_wf_n = wf_main._sorted_cmd_wf.cmd_wf_n;
-
-    // mode arb
-    std::vector<int> wf_arb = readData(args[1]); 
+// mode arb std::vector<int> wf_arb = readData(args[1]); 
     */ //////////////////////////////////////////////////////////////////////////////////////////////////// 
 
 
@@ -212,11 +210,13 @@ int main(int args_len, char * args[]) // release mode!
     //////////////////// drive 
     while(1)
     {
+        // test
         driv(wf1);
 
         driv(wf2);
 
         driv_arb(wf_arb);
+        // tes end
         /*
         driv(wf_buffer);
         driv(wf3);

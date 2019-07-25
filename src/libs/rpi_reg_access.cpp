@@ -36,6 +36,10 @@ volatile unsigned *gpio;
 #define GPIO_SET *(gpio+7)  // sets   bits which are 1 ignores bits which are 0
 #define GPIO_CLR *(gpio+10) // clears bits which are 1 ignores bits which are 0
 
+// GPIO Pull Up/Pull Down Register 
+#define GPIO_PULL *(gpio+37) // Pull up/pull down
+#define GPIO_PULLCLK0 *(gpio+38) // Pull up/pull down clock
+
 /*************************************************************************
 // GPIO read
 
@@ -50,23 +54,6 @@ void printButton(int g)
 }
 *************************************************************************/
 
-/*************************************************************************
-// GPIO Pull Up/Pull Down Register 
-
-#define GPIO_PULL *(gpio+37) // Pull up/pull down
-#define GPIO_PULLCLK0 *(gpio+38) // Pull up/pull down clock
-
-// GPIO Pull Up/Pull Down Register Example
-
-// enable pull-up on GPIO24&25
-GPIO_PULL = 2;
-short_wait();
-// clock on GPIO 24 & 25 (bit 24 & 25 set)
-GPIO_PULLCLK0 = 0x03000000;
-short_wait();
-GPIO_PULL = 0;
-GPIO_PULLCLK0 = 0;
-*************************************************************************/
 
 //
 // Set up a memory regions to access GPIO
@@ -102,9 +89,27 @@ static void setup_io()
     gpio = (volatile unsigned *)gpio_map;
 } // setup_io
 
+static void short_wait()
+{
+    for (int i=0; i<150; i++) 
+    {    // wait 150 cycles
+        asm volatile("nop");
+    }
+}
+
 void gpio_init()
 {
     setup_io(); // Set up gpi pointer for direct register access
+}
+
+void gpio_pull(int g, int mode)
+{
+    GPIO_PULL = mode; // 0: rest; 1: down; 2: up
+    short_wait();
+    GPIO_PULLCLK0 = 1<<g;
+    short_wait();
+    GPIO_PULL = 0;
+    GPIO_PULLCLK0 = 0;
 }
 
 void gpio_mode_out(int g)
